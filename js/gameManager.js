@@ -368,7 +368,8 @@ export class GameManager {
             brake: false,
             left: false,
             right: false,
-            boost: false
+            boost: false,
+            toggleCamera: false
         };
         
         // Gesture controls
@@ -385,6 +386,7 @@ export class GameManager {
             controls.left = controls.left || keys.left;
             controls.right = controls.right || keys.right;
             controls.boost = controls.boost || keys.shift;
+            controls.toggleCamera = keys.toggleCamera;
         }
         
         return controls;
@@ -410,7 +412,8 @@ export class GameManager {
             down: window.keys['KeyS'] || window.keys['ArrowDown'],
             left: window.keys['KeyA'] || window.keys['ArrowLeft'],
             right: window.keys['KeyD'] || window.keys['ArrowRight'],
-            shift: window.keys['ShiftLeft'] || window.keys['ShiftRight']
+            shift: window.keys['ShiftLeft'] || window.keys['ShiftRight'],
+            toggleCamera: window.keys['KeyV']
         };
     }
 
@@ -435,6 +438,13 @@ export class GameManager {
         const seconds = Math.floor(this.gameTime % 60);
         document.getElementById('hud-time').textContent = 
             `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        
+        // Update camera mode indicator
+        const cameraMode = this.playerVehicle.getCameraMode();
+        const cameraModeEl = document.getElementById('hud-camera-mode');
+        if (cameraModeEl) {
+            cameraModeEl.textContent = cameraMode === 'chase' ? '📷 Chase' : '📷 Hood';
+        }
     }
 
     handleCollision(collision) {

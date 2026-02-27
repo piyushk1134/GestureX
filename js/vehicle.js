@@ -28,12 +28,18 @@ export class VehicleController {
         this.laneSwitchCooldown = 0; // Cooldown timer to prevent multiple switches
         this.laneSwitchCooldownTime = 0.5; // 0.5 seconds between lane changes
         
+        // Camera POV system
+        this.cameraMode = 'chase'; // 'chase' or 'fixed' (cockpit)
+        this.cameraToggleCooldown = 0;
+        this.cameraToggleCooldownTime = 0.3; // Prevent rapid toggling
+        
         // Create 3D model
         this.body = null;
         this.createBody();
         
         console.log(`🏎️ Vehicle created: ${vehicleData.name}`);
         console.log(`🛣️ Lane system: 5 lanes, starting in center (lane ${this.currentLane})`);
+        console.log(`📷 Camera mode: ${this.cameraMode} (toggle with V key)`);
     }
 
     createBody() {
@@ -66,6 +72,17 @@ export class VehicleController {
         // Update lane switch cooldown
         if (this.laneSwitchCooldown > 0) {
             this.laneSwitchCooldown -= delta;
+        }
+        
+        // Update camera toggle cooldown
+        if (this.cameraToggleCooldown > 0) {
+            this.cameraToggleCooldown -= delta;
+        }
+        
+        // Handle camera toggle (V key)
+        if (controls.toggleCamera && this.cameraToggleCooldown <= 0) {
+            this.toggleCameraMode();
+            this.cameraToggleCooldown = this.cameraToggleCooldownTime;
         }
         
         // Handle acceleration
@@ -115,25 +132,60 @@ export class VehicleController {
     updateCamera() {
         if (!this.camera || !this.body) return;
         
-        // Camera offset: behind and above the car for better racing POV
-        // x: 0 (centered), y: height above car, z: distance behind car
-        const cameraOffset = new THREE.Vector3(0, 4, -12);
-        const cameraPosition = new THREE.Vector3();
-        
-        // Position camera relative to car
-        cameraPosition.copy(this.body.position);
-        cameraPosition.add(cameraOffset);
-        
-        // Smooth camera movement for stability
-        this.camera.position.lerp(cameraPosition, 0.1);
-        
-        // Look slightly ahead of the car for better visibility
-        const lookAtPoint = new THREE.Vector3(
-            this.body.position.x,
-            this.body.position.y + 1,
-            this.body.position.z + 5
-        );
-        this.camera.lookAt(lookAtPoint);
+        if (this.cameraMode === 'chase') {
+            // Chase camera: behind and above the car for better racing POV
+            const cameraOffset = new THREE.Vector3(0, 4, -12);
+            const cameraPosition = new THREE.Vector3();
+            
+            // Position camera relative to car
+            cameraPosition.copy(this.body.position);
+            cameraPosition.add(cameraOffset);
+            
+            // Smooth camera movement for stability
+            this.camera.position.lerp(cameraPosition, 0.1);
+            
+            // Look slightly ahead of the car for better visibility
+            const lookAtPoint = new THREE.Vector3(
+                this.body.position.x,
+                this.body.position.y + 1,
+                this.body.position.z + 5
+            );
+            this.camera.lookAt(lookAtPoint);
+            
+        } else if (this.cameraMode === 'fixed') {
+            // Fixed camera: cockpit/hood view - camera moves with the car
+            const cameraOffset = new THREE.Vector3(0, 2, 2);
+            const cameraPosition = new THREE.Vector3();
+            
+            // Position camera on the car (hood view)
+            cameraPosition.copy(this.body.position);
+            cameraPosition.add(cameraOffset);
+            
+            // Smooth camera movement
+            this.camera.position.lerp(cameraPosition, 0.15);
+            
+            // Look far ahead for fixed camera
+            const lookAtPoint = new THREE.Vector3(
+                this.body.position.x,
+                this.body.position.y + 1,
+                this.body.position.z + 50
+            );
+            this.camera.lookAt(lookAtPoint);
+        }
+    }
+    
+    toggleCameraMode() {
+        if (this.cameraMode === 'chase') {
+            this.cameraMode = 'fixed';
+            console.log('📷 Camera: Fixed (Hood View)');
+        } else {
+            this.cameraMode = 'chase';
+            console.log('📷 Camera: Chase View');
+        }
+    }
+    
+    getCameraMode() {
+        return this.cameraMode;
     }
 
     switchLane(direction) {
