@@ -3,6 +3,8 @@
 [![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://gesturex.vercel.app)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+[![GitHub stars](https://img.shields.io/github/stars/piyushk1134/GestureX?style=social)](https://github.com/piyushk1134/GestureX/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/piyushk1134/GestureX?style=social)](https://github.com/piyushk1134/GestureX/network/members)
 
 A fully-featured **gesture-controlled 3D racing game** built with THREE.js and MediaPipe hand tracking. Control your F1 car with just your hands - no keyboard or gamepad needed!
 
@@ -59,24 +61,42 @@ A fully-featured **gesture-controlled 3D racing game** built with THREE.js and M
 
 ### **Installation & Running Locally**
 
-1. **Open in Browser**
-   ```
-   Open index.html in your browser
-   OR
-   Use a local server (recommended)
-   ```
+#### Option 1: Clone from GitHub
+```bash
+# Clone the repository
+git clone https://github.com/piyushk1134/GestureX.git
+cd GestureX
 
-2. **Using Python Server**
-   ```bash
-   cd GestureXv0.13
-   python -m http.server 8000
-   ```
-   Then open: `http://localhost:8000`
+# Start a local server (Python)
+python -m http.server 8000
 
-3. **Using Node.js Server**
-   ```bash
-   npx http-server -p 8000
-   ```
+# Open in browser
+# Navigate to: http://localhost:8000
+```
+
+#### Option 2: Download ZIP
+1. Download from [GitHub](https://github.com/piyushk1134/GestureX/archive/refs/heads/main.zip)
+2. Extract the ZIP file
+3. Start a local server in the extracted folder
+4. Open `http://localhost:8000` in your browser
+
+#### Option 3: VS Code Live Server
+1. Open project folder in VS Code
+2. Install "Live Server" extension
+3. Right-click `index.html` → "Open with Live Server"
+
+### **Quick Start Steps**
+1. 🌐 Open the game in your browser
+2. 📷 Allow camera access when prompted
+3. 🖐️ Position your hand in front of the camera
+4. 🎮 Follow the calibration instructions
+5. 🏎️ Select your car and start racing!
+
+---
+
+## 📸 Screenshots
+
+> *Screenshots coming soon! Deploy the game and add your screenshots here.*
 
 ---
 
