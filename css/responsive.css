@@ -1,0 +1,434 @@
+/* 
+   Responsive UI Design for PWA
+   Scales perfectly across all devices
+*/
+
+/* CSS Variables for consistent theming and easy customization */
+:root {
+    /* Fluid spacing using clamp for responsive scaling */
+    --spacing-xs: clamp(0.25rem, 0.5vw, 0.5rem);
+    --spacing-sm: clamp(0.5rem, 1vw, 1rem);
+    --spacing-md: clamp(1rem, 2vw, 1.5rem);
+    --spacing-lg: clamp(1.5rem, 3vw, 2.5rem);
+    --spacing-xl: clamp(2rem, 4vw, 3.5rem);
+    
+    /* Fluid font sizes */
+    --font-xs: clamp(0.75rem, 1.5vw, 0.875rem);
+    --font-sm: clamp(0.875rem, 2vw, 1rem);
+    --font-base: clamp(1rem, 2.5vw, 1.125rem);
+    --font-lg: clamp(1.25rem, 3vw, 1.5rem);
+    --font-xl: clamp(1.5rem, 4vw, 2rem);
+    --font-2xl: clamp(2rem, 5vw, 3rem);
+    --font-3xl: clamp(2.5rem, 6vw, 4rem);
+    
+    /* Responsive button sizing */
+    --btn-height: clamp(45px, 8vh, 60px);
+    --btn-padding-x: clamp(1rem, 3vw, 2rem);
+    --btn-padding-y: clamp(0.75rem, 2vh, 1rem);
+    
+    /* Responsive border radius */
+    --radius-sm: clamp(4px, 0.5vw, 8px);
+    --radius-md: clamp(8px, 1vw, 12px);
+    --radius-lg: clamp(12px, 1.5vw, 20px);
+    --radius-xl: clamp(20px, 2vw, 30px);
+}
+
+/* Reset and base improvements */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+/* Improved Game Title - Fluid sizing */
+.game-title {
+    font-size: var(--font-3xl);
+    margin-bottom: var(--spacing-md);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+}
+
+.game-subtitle {
+    font-size: var(--font-lg);
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.9;
+}
+
+/* Responsive Menu Container */
+.menu-container,
+.loading-container,
+.gameover-container {
+    padding: var(--spacing-lg);
+    max-width: min(600px, 90vw);
+    margin: 0 auto;
+}
+
+/* Improved Button Styling - Touch Friendly */
+.menu-btn {
+    width: 100%;
+    min-height: var(--btn-height);
+    padding: var(--btn-padding-y) var(--btn-padding-x);
+    font-size: var(--font-base);
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: var(--spacing-sm) 0;
+    position: relative;
+    overflow: hidden;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Better touch feedback */
+.menu-btn:active {
+    transform: scale(0.98);
+}
+
+.menu-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.4s, height 0.4s;
+}
+
+.menu-btn:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Responsive Menu Buttons Container */
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    width: 100%;
+}
+
+/* Responsive Theme Toggle */
+.theme-toggle-btn {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-sm);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* HUD - Responsive and Clean */
+#game-hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: var(--spacing-md);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--spacing-sm);
+    z-index: 100;
+    pointer-events: none;
+}
+
+.hud-item {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    font-size: var(--font-sm);
+    font-weight: 600;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-xs);
+}
+
+.hud-value {
+    font-size: var(--font-lg);
+    font-weight: 700;
+}
+
+/* Responsive Camera Feed */
+#game-camera-feed {
+    position: fixed;
+    bottom: var(--spacing-md);
+    right: var(--spacing-md);
+    width: clamp(120px, 20vw, 200px);
+    height: auto;
+    aspect-ratio: 4/3;
+    border-radius: var(--radius-md);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+    z-index: 101;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Car Selection - Responsive Grid */
+.car-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+}
+
+.car-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.car-card:hover,
+.car-card:active {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(52, 152, 219, 0.3);
+}
+
+/* Settings Screen - Responsive Tabs */
+.settings-tabs {
+    display: flex;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-lg);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.settings-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.tab-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-sm);
+    white-space: nowrap;
+    flex-shrink: 0;
+    border-radius: var(--radius-md);
+    border: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.tab-btn.active {
+    background: rgba(52, 152, 219, 0.3);
+    border-color: #3498db;
+}
+
+/* Settings Controls - Better Spacing */
+.setting-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+.setting-label {
+    font-size: var(--font-base);
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    display: block;
+}
+
+.setting-control {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-base);
+    border-radius: var(--radius-md);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* Range sliders - Touch friendly */
+input[type="range"] {
+    width: 100%;
+    height: 40px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-track {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #3498db;
+    cursor: pointer;
+    margin-top: -8px;
+}
+
+input[type="range"]::-moz-range-track {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #3498db;
+    cursor: pointer;
+    border: none;
+}
+
+/* Loading Screen - Responsive */
+.loading-bar-container {
+    width: 100%;
+    max-width: 400px;
+    height: clamp(8px, 1vh, 12px);
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin: var(--spacing-md) auto;
+}
+
+.loading-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #3498db, #2ecc71);
+    transition: width 0.3s ease;
+    border-radius: var(--radius-lg);
+}
+
+/* Calibration Screen - Better Layout */
+.calibration-container {
+    padding: var(--spacing-lg);
+    max-width: min(800px, 95vw);
+    margin: 0 auto;
+}
+
+.calibration-video {
+    width: 100%;
+    max-width: 640px;
+    height: auto;
+    border-radius: var(--radius-lg);
+    margin: var(--spacing-md) auto;
+    display: block;
+}
+
+/* Game Over Screen - Responsive Stats */
+.gameover-stats {
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-lg);
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius-lg);
+}
+
+.final-score,
+.high-score {
+    font-size: var(--font-xl);
+    margin: var(--spacing-sm) 0;
+}
+
+/* Tablet Optimizations */
+@media (min-width: 768px) and (max-width: 1024px) {
+    #game-hud {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+    
+    .menu-container {
+        max-width: 700px;
+    }
+}
+
+/* Desktop Optimizations */
+@media (min-width: 1025px) {
+    :root {
+        --btn-height: 55px;
+    }
+    
+    .menu-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    #game-hud {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+}
+
+/* Small Mobile Phones */
+@media (max-width: 375px) {
+    .game-title {
+        font-size: clamp(1.75rem, 8vw, 2.5rem);
+    }
+    
+    .hud-item {
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+}
+
+/* Safe Area Handling for Notched Devices */
+@supports (padding: max(0px)) {
+    #game-hud {
+        padding-top: max(var(--spacing-md), env(safe-area-inset-top));
+        padding-left: max(var(--spacing-md), env(safe-area-inset-left));
+        padding-right: max(var(--spacing-md), env(safe-area-inset-right));
+    }
+    
+    .touch-controls {
+        padding-bottom: max(20px, env(safe-area-inset-bottom));
+        padding-left: max(20px, env(safe-area-inset-left));
+        padding-right: max(20px, env(safe-area-inset-right));
+    }
+}
+
+/* Reduce Motion for Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .menu-btn,
+    .hud-item,
+    .tab-btn {
+        border-width: 3px;
+    }
+}

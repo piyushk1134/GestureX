@@ -1,6 +1,6 @@
 /* Mobile and Touch Controls Styles */
 
-/* Touch Controls Overlay */
+/* Touch Controls Overlay - Improved for PWA */
 .touch-controls {
     position: fixed;
     top: 0;
@@ -12,7 +12,9 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    padding: 20px;
+    padding: max(20px, env(safe-area-inset-bottom));
+    padding-left: max(20px, env(safe-area-inset-left));
+    padding-right: max(20px, env(safe-area-inset-right));
     box-sizing: border-box;
 }
 
@@ -25,29 +27,34 @@
     pointer-events: all;
 }
 
-/* D-Pad Layout */
+/* D-Pad Layout - Responsive sizing */
 .touch-dpad {
     position: relative;
-    width: 150px;
-    height: 150px;
+    width: clamp(120px, 20vw, 160px);
+    height: clamp(120px, 20vw, 160px);
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
-    gap: 5px;
+    gap: clamp(4px, 0.5vw, 6px);
 }
 
 .touch-btn {
-    background: rgba(52, 152, 219, 0.6);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
+    background: rgba(52, 152, 219, 0.7);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: clamp(8px, 1vw, 12px);
     color: white;
-    font-size: 24px;
+    font-size: clamp(18px, 3vw, 24px);
     font-weight: bold;
     cursor: pointer;
     transition: all 0.1s;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .touch-btn:active,
@@ -78,69 +85,59 @@
 }
 
 .touch-action {
-    width: 70px;
-    height: 70px;
+    width: clamp(55px, 10vw, 75px);
+    height: clamp(55px, 10vw, 75px);
     border-radius: 50%;
-    font-size: 32px;
+    font-size: clamp(24px, 4vw, 36px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Mobile Responsive Adjustments */
 @media screen and (max-width: 768px) {
-    /* Menu buttons - make them larger and more touch-friendly */
-    .menu-btn {
-        min-height: 60px;
-        font-size: 18px;
-        margin: 12px 0;
-        padding: 15px 25px;
+    /* Screen containers - better padding */
+    .screen {
+        padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
     
-    /* Game title */
-    .game-title {
-        font-size: 2.5em;
+    /* Menu features - stack nicely */
+    .menu-features {
+        display: flex;
+        flex-direction: column;
+        gap: clamp(0.5rem, 2vw, 1rem);
+        margin-top: clamp(1rem, 3vw, 2rem);
     }
     
-    /* Settings tabs */
-    .tab-btn {
-        padding: 12px 20px;
-        font-size: 14px;
+    .menu-features p {
+        font-size: clamp(0.875rem, 2.5vw, 1rem);
     }
     
-    /* Car selector buttons */
-    #btn-prev-car,
-    #btn-next-car {
-        padding: 20px 30px;
-        font-size: 28px;
+    /* Car selector - better mobile layout */
+    .car-info {
+        padding: clamp(1rem, 3vw, 1.5rem);
     }
     
-    /* HUD elements */
+    .car-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: clamp(0.5rem, 2vw, 1rem);
+    }
+    
+    /* HUD - compact mobile layout */
     #game-hud {
-        font-size: 14px;
+        grid-template-columns: repeat(2, 1fr);
+        padding: clamp(0.5rem, 2vw, 1rem);
+        gap: clamp(0.25rem, 1vw, 0.5rem);
     }
     
     .hud-item {
-        padding: 8px 15px;
+        font-size: clamp(0.75rem, 2vw, 0.875rem);
+        padding: clamp(0.5rem, 1.5vw, 0.75rem);
     }
     
-    /* Camera feed - smaller on mobile */
-    #game-camera-feed {
-        width: 150px;
-        height: 120px;
-    }
-    
-    /* Touch controls adjustments for smaller screens */
-    .touch-dpad {
-        width: 130px;
-        height: 130px;
-    }
-    
-    .touch-btn {
-        font-size: 20px;
-    }
-    
-    .touch-action {
-        width: 60px;
-        height: 60px;
-        font-size: 28px;
+    .hud-value {
+        font-size: clamp(1rem, 3vw, 1.25rem);
     }
 }
 
