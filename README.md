@@ -8,7 +8,7 @@
 
 A fully-featured **gesture-controlled 3D racing game** built with THREE.js and MediaPipe hand tracking. Control your F1 car with just your hands - no keyboard or gamepad needed!
 
-🎮 **[Play Live Demo](https://gesturex.vercel.app)** | 📚 **[Documentation](./docs/)** | 🐛 **[Report Bug](https://github.com/piyushk1134/GestureX/issues)**
+🎮 **[Play Live Demo](https://gesture-x.vercel.app)** | 📚 **[Documentation](./docs/)** | 🐛 **[Report Bug](https://github.com/piyushk1134/GestureX/issues)**
 
 ![GestureX Racing Preview](https://via.placeholder.com/800x400/1a1a2e/16213e?text=GestureX+Racing+Preview)
 
