@@ -75,7 +75,7 @@ python -m http.server 8000
 ```
 
 #### Option 2: Download ZIP
-1. Download from [GitHub](https://github.com/piyushk1134/GestureX/archive/refs/heads/main.zip)
+1. Download from [GitHub]([https://github.com/piyushk1134/GestureX/archive/refs/heads/main.zip](https://pbs.twimg.com/media/G3pBT_PXkAAyVDC.jpg))
 2. Extract the ZIP file
 3. Start a local server in the extracted folder
 4. Open `http://localhost:8000` in your browser
