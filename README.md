@@ -100,6 +100,26 @@ python -m http.server 8000
 
 ---
 
+## 🛠️ Tech Stack
+
+### **Core Technologies**
+- **[THREE.js](https://threejs.org/)** - 3D Graphics & WebGL Rendering
+- **[MediaPipe](https://mediapipe.dev/)** - Hand Tracking & Gesture Recognition
+- **Vanilla JavaScript (ES6+)** - Game Logic & State Management
+- **HTML5 & CSS3** - UI & Styling
+
+### **Key Libraries & APIs**
+- **GLTFLoader** - 3D Model Loading (.glb files)
+- **WebGL** - Hardware-accelerated graphics
+- **LocalStorage API** - Settings persistence
+- **getUserMedia API** - Camera access
+
+### **Deployment**
+- **[Vercel](https://vercel.com)** - Hosting & CI/CD
+- **GitHub** - Version control & collaboration
+
+---
+
 ## 🎮 How to Play
 
 ### **1. Main Menu**
