@@ -146,90 +146,90 @@ export class VehicleController {
         
         switch (this.cameraMode) {
             case 'chase':
-                // Default chase camera: behind and above the car
-                cameraOffset = new THREE.Vector3(0, 4, -12);
+                // Default chase camera: behind and above the car - perfect balance
+                cameraOffset = new THREE.Vector3(0, 3.5, -10);
                 lerpSpeed = 0.1;
                 lookAtPoint = new THREE.Vector3(
                     this.body.position.x,
                     this.body.position.y + 1,
-                    this.body.position.z + 5
+                    this.body.position.z + 8
                 );
                 break;
                 
             case 'chase_close':
-                // Close chase camera: closer to the car for more intense view
-                cameraOffset = new THREE.Vector3(0, 3, -8);
+                // Close chase camera: closer for intense racing action
+                cameraOffset = new THREE.Vector3(0, 2.5, -6);
                 lerpSpeed = 0.12;
                 lookAtPoint = new THREE.Vector3(
                     this.body.position.x,
                     this.body.position.y + 1,
-                    this.body.position.z + 3
+                    this.body.position.z + 5
                 );
                 break;
                 
             case 'hood':
                 // Hood/bonnet camera: on the hood looking forward
-                cameraOffset = new THREE.Vector3(0, 2, 2);
+                cameraOffset = new THREE.Vector3(0, 1.8, 1.5);
                 lerpSpeed = 0.15;
                 lookAtPoint = new THREE.Vector3(
                     this.body.position.x,
-                    this.body.position.y + 1,
+                    this.body.position.y + 1.5,
                     this.body.position.z + 50
                 );
                 break;
                 
             case 'cockpit':
-                // Cockpit camera: inside the car, first-person view
-                cameraOffset = new THREE.Vector3(0, 1.5, 0.5);
+                // Cockpit camera: inside the car, driver's perspective
+                cameraOffset = new THREE.Vector3(0, 1.3, 0.3);
                 lerpSpeed = 0.2;
                 lookAtPoint = new THREE.Vector3(
                     this.body.position.x,
-                    this.body.position.y + 1.5,
+                    this.body.position.y + 1.3,
                     this.body.position.z + 100
                 );
                 break;
                 
             case 'chase_far':
-                // Far chase camera: cinematic view from far behind
-                cameraOffset = new THREE.Vector3(0, 6, -20);
+                // Far chase camera: cinematic wide view
+                cameraOffset = new THREE.Vector3(0, 5, -16);
                 lerpSpeed = 0.08;
                 lookAtPoint = new THREE.Vector3(
                     this.body.position.x,
                     this.body.position.y + 1,
-                    this.body.position.z + 10
+                    this.body.position.z + 12
                 );
                 break;
                 
             case 'side':
-                // Side camera: viewing from the side
-                cameraOffset = new THREE.Vector3(-10, 3, -2);
+                // Side camera: dynamic side profile view
+                cameraOffset = new THREE.Vector3(-8, 2.5, -1);
                 lerpSpeed = 0.1;
                 lookAtPoint = new THREE.Vector3(
                     this.body.position.x,
                     this.body.position.y + 1,
-                    this.body.position.z + 5
+                    this.body.position.z + 8
                 );
                 break;
                 
             case 'front':
-                // Front camera: looking at the car from front
-                cameraOffset = new THREE.Vector3(0, 3, 15);
+                // Front camera: dramatic face-on view
+                cameraOffset = new THREE.Vector3(0, 2.5, 12);
                 lerpSpeed = 0.1;
                 lookAtPoint = new THREE.Vector3(
                     this.body.position.x,
                     this.body.position.y + 1,
-                    this.body.position.z
+                    this.body.position.z - 2
                 );
                 break;
                 
             default:
                 // Fallback to chase camera
-                cameraOffset = new THREE.Vector3(0, 4, -12);
+                cameraOffset = new THREE.Vector3(0, 3.5, -10);
                 lerpSpeed = 0.1;
                 lookAtPoint = new THREE.Vector3(
                     this.body.position.x,
                     this.body.position.y + 1,
-                    this.body.position.z + 5
+                    this.body.position.z + 8
                 );
         }
         
