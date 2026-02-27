@@ -5,6 +5,7 @@ import { SettingsManager } from './settingsManager.js';
 import { GestureControl } from './gestureControl.js';
 import { VehicleController } from './vehicle.js';
 import { GameManager } from './gameManager.js';
+import { TouchControls } from './touchControls.js';
 import { showDebugInfo, createErrorOverlay } from './debugHelper.js';
 
 // Game States
@@ -40,6 +41,7 @@ class GestureXRacing {
         this.carSelector = null;
         this.settingsManager = null;
         this.gestureControl = null;
+        this.touchControls = null;
         this.gameManager = null;
         
         // Loading
@@ -104,6 +106,12 @@ class GestureXRacing {
         console.log('🔧 Step 9: Initializing gesture control...');
         this.gestureControl = new GestureControl();
         console.log('✅ Gesture control ready');
+        
+        // Initialize touch controls
+        console.log('🔧 Step 9b: Initializing touch controls...');
+        this.touchControls = new TouchControls();
+        this.touchControls.init();
+        console.log('✅ Touch controls ready');
         
         // Hide loading, show menu
         console.log('🔧 Step 10: Switching to menu...');

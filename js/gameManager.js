@@ -384,6 +384,17 @@ export class GameManager {
             Object.assign(controls, gestureInput.controls);
         }
         
+        // Touch controls (mobile)
+        if (this.game.touchControls) {
+            const touchInput = this.game.touchControls.getControls();
+            controls.accelerate = controls.accelerate || touchInput.accelerate;
+            controls.brake = controls.brake || touchInput.brake;
+            controls.left = controls.left || touchInput.left;
+            controls.right = controls.right || touchInput.right;
+            controls.boost = controls.boost || touchInput.boost;
+            controls.toggleCamera = controls.toggleCamera || touchInput.toggleCamera;
+        }
+        
         // Keyboard fallback (safe access)
         const keyboardFallback = this.game.settingsManager?.settings?.controls?.keyboardFallback ?? true;
         if (keyboardFallback) {
@@ -393,7 +404,7 @@ export class GameManager {
             controls.left = controls.left || keys.left;
             controls.right = controls.right || keys.right;
             controls.boost = controls.boost || keys.shift;
-            controls.toggleCamera = keys.toggleCamera;
+            controls.toggleCamera = controls.toggleCamera || keys.toggleCamera;
         }
         
         return controls;

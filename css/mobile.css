@@ -1,0 +1,249 @@
+/* Mobile and Touch Controls Styles */
+
+/* Touch Controls Overlay */
+.touch-controls {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.touch-controls.hidden {
+    display: none;
+}
+
+.touch-left-side,
+.touch-right-side {
+    pointer-events: all;
+}
+
+/* D-Pad Layout */
+.touch-dpad {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 5px;
+}
+
+.touch-btn {
+    background: rgba(52, 152, 219, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.1s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.touch-btn:active,
+.touch-btn.active {
+    background: rgba(52, 152, 219, 0.9);
+    transform: scale(0.95);
+    box-shadow: 0 0 20px rgba(52, 152, 219, 0.8);
+}
+
+.touch-up {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.touch-left {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.touch-down {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+.touch-right {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.touch-action {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    font-size: 32px;
+}
+
+/* Mobile Responsive Adjustments */
+@media screen and (max-width: 768px) {
+    /* Menu buttons - make them larger and more touch-friendly */
+    .menu-btn {
+        min-height: 60px;
+        font-size: 18px;
+        margin: 12px 0;
+        padding: 15px 25px;
+    }
+    
+    /* Game title */
+    .game-title {
+        font-size: 2.5em;
+    }
+    
+    /* Settings tabs */
+    .tab-btn {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+    
+    /* Car selector buttons */
+    #btn-prev-car,
+    #btn-next-car {
+        padding: 20px 30px;
+        font-size: 28px;
+    }
+    
+    /* HUD elements */
+    #game-hud {
+        font-size: 14px;
+    }
+    
+    .hud-item {
+        padding: 8px 15px;
+    }
+    
+    /* Camera feed - smaller on mobile */
+    #game-camera-feed {
+        width: 150px;
+        height: 120px;
+    }
+    
+    /* Touch controls adjustments for smaller screens */
+    .touch-dpad {
+        width: 130px;
+        height: 130px;
+    }
+    
+    .touch-btn {
+        font-size: 20px;
+    }
+    
+    .touch-action {
+        width: 60px;
+        height: 60px;
+        font-size: 28px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    /* Even smaller screens - phone portrait */
+    .game-title {
+        font-size: 2em;
+    }
+    
+    .menu-btn {
+        min-height: 50px;
+        font-size: 16px;
+        padding: 12px 20px;
+    }
+    
+    .touch-dpad {
+        width: 110px;
+        height: 110px;
+    }
+    
+    .touch-btn {
+        font-size: 18px;
+    }
+    
+    .touch-action {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+    }
+    
+    #game-camera-feed {
+        width: 120px;
+        height: 90px;
+    }
+}
+
+/* Landscape mode optimizations */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+    .touch-controls {
+        padding: 10px;
+    }
+    
+    .touch-dpad {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .touch-btn {
+        font-size: 16px;
+    }
+    
+    .touch-action {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+    }
+}
+
+/* Prevent text selection on touch */
+.touch-controls * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide gesture camera feed on very small screens */
+@media screen and (max-width: 480px) {
+    #game-camera-feed {
+        display: none;
+    }
+}
+
+/* Adjust game canvas for mobile */
+@media screen and (max-width: 768px) {
+    #game-canvas {
+        width: 100vw;
+        height: 100vh;
+    }
+}
+
+/* Install PWA prompt button (optional) */
+.install-pwa-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    display: none;
+}
+
+.install-pwa-btn.show {
+    display: block;
+}
+
+.install-pwa-btn:active {
+    transform: scale(0.95);
+}
