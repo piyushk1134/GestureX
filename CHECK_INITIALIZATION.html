@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestureX - Initialization Checker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #3498db;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #95a5a6;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        
+        .status-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid #3498db;
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(52, 152, 219, 0.3);
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .checkmark {
+            color: #2ecc71;
+            font-size: 40px;
+        }
+        
+        .error-mark {
+            color: #e74c3c;
+            font-size: 40px;
+        }
+        
+        .step-list {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .step {
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        
+        .step.pending {
+            background: rgba(149, 165, 166, 0.1);
+            color: #95a5a6;
+        }
+        
+        .step.running {
+            background: rgba(52, 152, 219, 0.2);
+            color: #3498db;
+            border-left: 4px solid #3498db;
+        }
+        
+        .step.complete {
+            background: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+        }
+        
+        .step.error {
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .log-output {
+            background: #000;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        .log-line {
+            padding: 4px 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        
+        .log-info { color: #3498db; }
+        .log-success { color: #2ecc71; }
+        .log-error { color: #e74c3c; }
+        .log-warning { color: #f39c12; }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .info-panel {
+            background: rgba(52, 152, 219, 0.1);
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .info-panel h3 {
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        
+        .info-panel ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 GestureX Initialization Checker</h1>
+        <p class="subtitle">Real-time monitoring of game initialization</p>
+        
+        <div class="status-box">
+            <div class="status-indicator" id="status-indicator">
+                <div class="spinner"></div>
+                <span>Checking initialization...</span>
+            </div>
+            
+            <div class="step-list" id="step-list">
+                <div class="step pending" id="step-1">⏳ Step 1: Setting up renderer</div>
+                <div class="step pending" id="step-2">⏳ Step 2: Setting up scene</div>
+                <div class="step pending" id="step-3">⏳ Step 3: Setting up camera</div>
+                <div class="step pending" id="step-4">⏳ Step 4: Setting up lights</div>
+                <div class="step pending" id="step-5">⏳ Step 5: Initializing settings manager</div>
+                <div class="step pending" id="step-6">⏳ Step 6: Setting up event listeners</div>
+                <div class="step pending" id="step-7">⏳ Step 7: Loading car models</div>
+                <div class="step pending" id="step-8">⏳ Step 8: Initializing car selector</div>
+                <div class="step pending" id="step-9">⏳ Step 9: Initializing gesture control</div>
+                <div class="step pending" id="step-10">⏳ Step 10: Switching to menu</div>
+                <div class="step pending" id="step-11">⏳ Step 11: Starting animation loop</div>
+            </div>
+            
+            <div class="log-output" id="log-output">
+                <div class="log-line log-info">📋 Console output will appear here...</div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="startMonitoring()">🔄 Start Monitoring</button>
+                <a href="index.html" class="btn btn-success">🎮 Open Main Game</a>
+                <a href="tmp_rovodev_debug_init.html" class="btn btn-secondary">🔬 Run Full Diagnostic</a>
+                <button class="btn btn-secondary" onclick="clearLogs()">🗑️ Clear Logs</button>
+            </div>
+        </div>
+        
+        <div class="info-panel">
+            <h3>💡 How This Works</h3>
+            <ul>
+                <li>This page monitors the main game initialization in real-time</li>
+                <li>Click "Start Monitoring" to begin checking initialization steps</li>
+                <li>Each step will update as it completes</li>
+                <li>Console logs from main.js will appear in the output window</li>
+                <li>If initialization gets stuck, you'll see which step failed</li>
+            </ul>
+        </div>
+        
+        <div class="info-panel" style="border-left-color: #f39c12; background: rgba(243, 156, 18, 0.1);">
+            <h3>⚠️ Common Issues</h3>
+            <ul>
+                <li><strong>Stuck at Step 7:</strong> Make sure you're running on http://localhost:8000 (not file://)</li>
+                <li><strong>Timeout errors:</strong> Check that .glb files exist in assets/cars/ folder</li>
+                <li><strong>No steps updating:</strong> Server might not be running - use START_GAME.bat</li>
+            </ul>
+        </div>
+    </div>
+
+    <script type="module">
+        let logLines = [];
+        let currentStep = 0;
+        
+        const stepKeywords = [
+            'Step 1: Setting up renderer',
+            'Step 2: Setting up scene',
+            'Step 3: Setting up camera',
+            'Step 4: Setting up lights',
+            'Step 5: Initializing settings manager',
+            'Step 6: Setting up event listeners',
+            'Step 7: Loading car models',
+            'Step 8: Initializing car selector',
+            'Step 9: Initializing gesture control',
+            'Step 10: Switching to menu',
+            'Step 11: Starting animation loop'
+        ];
+        
+        function addLog(message, type = 'info') {
+            const logOutput = document.getElementById('log-output');
+            const line = document.createElement('div');
+            line.className = `log-line log-${type}`;
+            line.textContent = message;
+            logOutput.appendChild(line);
+            logOutput.scrollTop = logOutput.scrollHeight;
+            
+            // Check if this matches a step
+            stepKeywords.forEach((keyword, index) => {
+                if (message.includes(keyword)) {
+                    updateStep(index + 1, 'running');
+                }
+                if (message.includes('✅') && message.includes(keyword.split(':')[1])) {
+                    updateStep(index + 1, 'complete');
+                }
+            });
+            
+            // Check for success
+            if (message.includes('INITIALIZED SUCCESSFULLY')) {
+                showSuccess();
+            }
+            
+            // Check for errors
+            if (message.includes('INITIALIZATION FAILED') || message.includes('❌')) {
+                showError();
+            }
+        }
+        
+        function updateStep(stepNum, status) {
+            const stepEl = document.getElementById(`step-${stepNum}`);
+            if (!stepEl) return;
+            
+            stepEl.className = `step ${status}`;
+            
+            if (status === 'running') {
+                stepEl.textContent = `🔄 ${stepKeywords[stepNum - 1]}`;
+            } else if (status === 'complete') {
+                stepEl.textContent = `✅ ${stepKeywords[stepNum - 1]}`;
+            } else if (status === 'error') {
+                stepEl.textContent = `❌ ${stepKeywords[stepNum - 1]}`;
+            }
+        }
+        
+        function showSuccess() {
+            const indicator = document.getElementById('status-indicator');
+            indicator.innerHTML = '<div class="checkmark">✅</div><span style="color: #2ecc71;">Initialization Successful!</span>';
+        }
+        
+        function showError() {
+            const indicator = document.getElementById('status-indicator');
+            indicator.innerHTML = '<div class="error-mark">❌</div><span style="color: #e74c3c;">Initialization Failed - Check Logs</span>';
+        }
+        
+        function clearLogs() {
+            const logOutput = document.getElementById('log-output');
+            logOutput.innerHTML = '<div class="log-line log-info">📋 Logs cleared. Click "Start Monitoring" to begin.</div>';
+            
+            // Reset steps
+            for (let i = 1; i <= 11; i++) {
+                const stepEl = document.getElementById(`step-${i}`);
+                stepEl.className = 'step pending';
+                stepEl.textContent = `⏳ ${stepKeywords[i - 1]}`;
+            }
+            
+            const indicator = document.getElementById('status-indicator');
+            indicator.innerHTML = '<div class="spinner"></div><span>Ready to monitor...</span>';
+        }
+        
+        window.clearLogs = clearLogs;
+        
+        async function startMonitoring() {
+            clearLogs();
+            addLog('🎬 Starting initialization monitoring...', 'info');
+            addLog('📦 Importing main.js...', 'info');
+            
+            // Intercept console.log
+            const originalLog = console.log;
+            const originalError = console.error;
+            
+            console.log = function(...args) {
+                originalLog.apply(console, args);
+                const message = args.join(' ');
+                
+                if (message.includes('✅')) {
+                    addLog(message, 'success');
+                } else if (message.includes('❌')) {
+                    addLog(message, 'error');
+                } else if (message.includes('⚠️')) {
+                    addLog(message, 'warning');
+                } else {
+                    addLog(message, 'info');
+                }
+            };
+            
+            console.error = function(...args) {
+                originalError.apply(console, args);
+                const message = args.join(' ');
+                addLog('❌ ' + message, 'error');
+            };
+            
+            try {
+                await import('./js/main.js');
+                addLog('✅ main.js imported successfully', 'success');
+                
+                // Monitor for completion
+                const checkInterval = setInterval(() => {
+                    if (window.game) {
+                        addLog(`📊 Game state: ${window.game.state}`, 'info');
+                        addLog(`🚗 Vehicles loaded: ${window.game.vehicles.length}`, 'success');
+                        
+                        if (window.game.state !== 'loading') {
+                            clearInterval(checkInterval);
+                        }
+                    }
+                }, 500);
+                
+                // Timeout after 35 seconds
+                setTimeout(() => {
+                    clearInterval(checkInterval);
+                    if (!window.game || window.game.state === 'loading') {
+                        addLog('⏱️ Monitoring timeout - initialization may have failed', 'warning');
+                        showError();
+                    }
+                }, 35000);
+                
+            } catch (error) {
+                addLog(`❌ Import failed: ${error.message}`, 'error');
+                addLog(error.stack, 'error');
+                showError();
+            }
+        }
+        
+        window.startMonitoring = startMonitoring;
+        
+        // Auto-start on page load
+        addLog('👋 Welcome to the Initialization Checker!', 'info');
+        addLog('💡 Click "Start Monitoring" to begin, or "Open Main Game" to play', 'info');
+    </script>
+</body>
+</html>

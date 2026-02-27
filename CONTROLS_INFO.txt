@@ -1,0 +1,69 @@
+================================================================================
+                    🎮 GESTUREX RACING - CONTROLS
+================================================================================
+
+⚠️ IMPORTANT NOTE (v0.13):
+Gesture detection is currently SIMULATED for demonstration purposes.
+Real MediaPipe hand tracking will be added in v0.14.
+
+================================================================================
+                        ⌨️ KEYBOARD CONTROLS
+================================================================================
+
+MOVEMENT:
+  W or ↑        - Accelerate
+  S or ↓        - Brake
+  A or ←        - Turn Left
+  D or →        - Turn Right
+  Shift         - Boost (not implemented yet)
+
+GAME CONTROLS:
+  ESC           - Pause / Resume
+  Space         - Start race (from calibration screen)
+
+================================================================================
+                        🖐️ GESTURE CONTROLS (Future)
+================================================================================
+
+Currently simulated - will be real in v0.14:
+
+  🖐️ Open Palm      - Accelerate
+  ✊ Fist           - Brake
+  👈 Tilt Left     - Turn Left
+  👉 Tilt Right    - Turn Right
+  👍 Thumbs Up     - Boost
+  ✌️ Peace Sign    - Pause
+
+================================================================================
+                            💡 TIPS
+================================================================================
+
+1. ENABLE KEYBOARD FALLBACK:
+   Settings → Controls → Keyboard Fallback: ON
+
+2. ADJUST SENSITIVITY:
+   Settings → Controls → Sensitivity: 1-10
+
+3. CAMERA NOT WORKING?
+   - Don't worry! Use keyboard controls
+   - Gesture detection is simulated anyway in v0.13
+   - Real detection coming in v0.14
+
+4. PRACTICE MODE:
+   - Use calibration screen to see gesture guide
+   - Camera feed shows (but detection is fake)
+   - Use keyboard to actually control
+
+================================================================================
+                        🏁 GETTING STARTED
+================================================================================
+
+1. Main Menu → START GAME
+2. Calibration screen appears
+3. Press SPACE or click START RACE
+4. Use keyboard (W,A,S,D) to drive!
+5. ESC to pause
+
+================================================================================
+
+Have fun! 🎮🏁

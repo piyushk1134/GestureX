@@ -1,0 +1,93 @@
+================================================================================
+                   🎮 GESTUREX RACING v0.13 🎮
+================================================================================
+
+📁 FOLDER LOCATION:
+   GestureXv0.13
+
+✅ IF YOU CAN READ THIS, THE FILES ARE WORKING!
+
+================================================================================
+                      🚀 HOW TO RUN THE GAME
+================================================================================
+
+METHOD 1: EASIEST (Windows)
+----------------------------
+1. Double-click: START_GAME.bat
+2. Wait for browser to open automatically
+3. Game will load at http://localhost:8000
+
+METHOD 2: MANUAL (Any OS)
+--------------------------
+1. Open Command Prompt or Terminal in this folder
+2. Run ONE of these commands:
+
+   Python:
+   python -m http.server 8000
+
+   OR Node.js:
+   npx http-server -p 8000
+
+3. Open browser to: http://localhost:8000
+
+METHOD 3: TEST FIRST
+--------------------
+1. Double-click: TEST_SIMPLE.html
+2. If you see a green success message, files are working
+3. Then use Method 1 or 2 above
+
+================================================================================
+                          ⚠️ IMPORTANT NOTES
+================================================================================
+
+❌ DON'T: Double-click index.html directly
+   (3D models won't load without a server)
+
+✅ DO: Use START_GAME.bat or run a local server
+   (This allows proper loading of 3D car models)
+
+================================================================================
+                          📂 FOLDER CONTENTS
+================================================================================
+
+You should see these files/folders:
+  ✓ index.html              - Main game file
+  ✓ START_GAME.bat          - Windows launcher
+  ✓ TEST_SIMPLE.html        - Test file
+  ✓ README.md               - Full documentation
+  ✓ OPEN_ME_FIRST.txt       - This file
+  ✓ css/                    - Stylesheets
+  ✓ js/                     - JavaScript files
+  ✓ assets/                 - 3D models & textures
+  ✓ docs/                   - Documentation
+
+================================================================================
+                          🎮 GAME FEATURES
+================================================================================
+
+✅ 5 Formula 1 & Supercar models
+✅ Gesture control with webcam
+✅ Settings menu (graphics, audio, controls)
+✅ Car selection with stats
+✅ Calibration screen
+✅ Professional UI
+
+================================================================================
+                          🐛 TROUBLESHOOTING
+================================================================================
+
+PROBLEM: "Can't see anything"
+SOLUTION: Open File Explorer and navigate to:
+          C:\gesturex\gesture racing game\GestureXv0.13
+
+PROBLEM: "Models not loading"
+SOLUTION: Make sure you're using a local server (not opening index.html directly)
+
+PROBLEM: "START_GAME.bat doesn't work"
+SOLUTION: Install Python from https://www.python.org/downloads/
+
+================================================================================
+
+Need help? Read README.md for full documentation!
+
+================================================================================

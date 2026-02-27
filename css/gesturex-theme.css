@@ -1,0 +1,480 @@
+/* GestureX Theme - Color Scheme & Design System */
+
+:root {
+    /* GestureX Colors */
+    --primary-color: #3498db;      /* Blue */
+    --secondary-color: #e74c3c;    /* Red */
+    --success-color: #2ecc71;      /* Green */
+    --warning-color: #f39c12;      /* Orange */
+    --info-color: #3498db;         /* Blue */
+    --danger-color: #e74c3c;       /* Red */
+    
+    /* Background Colors */
+    --dark-bg: #1a1a2e;            /* Dark background */
+    --darker-bg: #16213e;          /* Darker background */
+    --card-bg: #0f3460;            /* Card background */
+    
+    /* Text Colors */
+    --text-primary: #ffffff;
+    --text-secondary: #95a5a6;
+    --text-light: #ecf0f1;
+    
+    /* Accent Colors */
+    --yellow: #f1c40f;
+    --light-gray: #95a5a6;
+    
+    /* Gradients */
+    --gradient-bg: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 100%);
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-success: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    --gradient-danger: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-xxl: 48px;
+    
+    /* Border Radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.4);
+    
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* Emoji Support */
+.emoji {
+    font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/* Button Styles Matching GestureX */
+.menu-btn {
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-md);
+    min-width: 250px;
+    margin: var(--spacing-sm) 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    transition: left var(--transition-normal);
+}
+
+.menu-btn:hover::before {
+    left: 100%;
+}
+
+.menu-btn:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-lg);
+}
+
+.menu-btn:active {
+    transform: scale(0.98);
+}
+
+/* Button Variants */
+.btn-primary {
+    background: var(--gradient-success);
+    color: white;
+}
+
+.btn-primary:hover {
+    filter: brightness(1.1);
+}
+
+.btn-secondary {
+    background: var(--gradient-danger);
+    color: white;
+}
+
+.btn-info {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, var(--warning-color) 0%, #e67e22 100%);
+    color: white;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+    color: white;
+}
+
+/* Screen Titles */
+.game-title {
+    font-size: 64px;
+    font-weight: 800;
+    color: var(--primary-color);
+    text-shadow: 0 0 20px rgba(52, 152, 219, 0.5);
+    margin-bottom: var(--spacing-md);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.game-subtitle {
+    font-size: 24px;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xxl);
+}
+
+.screen-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-xl);
+    text-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
+}
+
+/* Feature Highlights */
+.menu-features {
+    margin-top: var(--spacing-xxl);
+}
+
+.menu-features p {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin: var(--spacing-sm) 0;
+}
+
+/* Car Stats Bars */
+.car-stats {
+    margin-top: var(--spacing-lg);
+}
+
+.stat {
+    display: flex;
+    align-items: center;
+    margin: var(--spacing-md) 0;
+    gap: var(--spacing-md);
+}
+
+.stat-label {
+    min-width: 140px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-light);
+}
+
+.stat-bar {
+    flex: 1;
+    height: 24px;
+    background: var(--darker-bg);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.stat-fill {
+    height: 100%;
+    background: var(--gradient-primary);
+    transition: width var(--transition-slow);
+    box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+}
+
+.stat-value {
+    min-width: 50px;
+    text-align: right;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Gesture Table */
+.gesture-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.gesture-table tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gesture-table td {
+    padding: var(--spacing-md);
+    font-size: 18px;
+}
+
+.gesture-icon {
+    font-size: 24px;
+    min-width: 200px;
+    color: var(--text-light);
+}
+
+.gesture-action {
+    color: var(--success-color);
+    font-weight: 600;
+}
+
+/* Camera Feed */
+.camera-feed {
+    width: 320px;
+    height: 240px;
+    border-radius: var(--radius-md);
+    border: 3px solid var(--primary-color);
+    box-shadow: var(--shadow-lg);
+    background: black;
+}
+
+.mini-camera-feed {
+    width: 160px;
+    height: 120px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--primary-color);
+    box-shadow: var(--shadow-md);
+}
+
+/* Hand Status */
+.hand-status {
+    margin-top: var(--spacing-md);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.hand-status.detected {
+    color: var(--success-color);
+}
+
+.hand-status.not-detected {
+    color: var(--secondary-color);
+}
+
+/* Settings Tabs */
+.settings-tabs {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.tab-btn {
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    border-bottom: 3px solid transparent;
+}
+
+.tab-btn:hover {
+    color: var(--text-light);
+}
+
+.tab-btn.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn var(--transition-normal);
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Setting Items */
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+    margin: var(--spacing-sm) 0;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+}
+
+.setting-item label {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-light);
+}
+
+.setting-item input[type="range"] {
+    width: 200px;
+}
+
+.setting-item select {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--darker-bg);
+    border: 1px solid var(--primary-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-light);
+    font-size: 14px;
+}
+
+/* HUD Styling */
+.hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.hud > div {
+    pointer-events: auto;
+}
+
+.hud-top-left {
+    position: absolute;
+    top: var(--spacing-lg);
+    left: var(--spacing-lg);
+}
+
+.hud-top-right {
+    position: absolute;
+    top: var(--spacing-lg);
+    right: var(--spacing-lg);
+    text-align: right;
+}
+
+.hud-bottom-left {
+    position: absolute;
+    bottom: var(--spacing-lg);
+    left: var(--spacing-lg);
+}
+
+.hud-bottom-right {
+    position: absolute;
+    bottom: var(--spacing-lg);
+    right: var(--spacing-lg);
+}
+
+.hud > div > div {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-light);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    margin: var(--spacing-sm) 0;
+    background: rgba(0, 0, 0, 0.6);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    backdrop-filter: blur(5px);
+}
+
+/* Animations */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(52, 152, 219, 0.8);
+    }
+}
+
+/* Hint Text */
+.hint-text {
+    margin-top: var(--spacing-xl);
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+/* Carousel Buttons */
+.carousel-btn {
+    font-size: 48px;
+    background: rgba(52, 152, 219, 0.2);
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    font-weight: 700;
+}
+
+.carousel-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.1);
+}
+
+.carousel-btn:active {
+    transform: scale(0.95);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .game-title {
+        font-size: 48px;
+    }
+    
+    .screen-title {
+        font-size: 36px;
+    }
+    
+    .menu-btn {
+        min-width: 200px;
+        font-size: 16px;
+    }
+    
+    .camera-feed {
+        width: 240px;
+        height: 180px;
+    }
+}

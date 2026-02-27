@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Can You See This?</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+        .container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 60px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            font-size: 64px;
+            margin: 0 0 20px 0;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        p {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+        .success {
+            color: #2ecc71;
+            font-weight: bold;
+            font-size: 32px;
+        }
+        button {
+            margin-top: 30px;
+            padding: 20px 40px;
+            font-size: 20px;
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #27ae60;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ SUCCESS!</h1>
+        <p class="success">You can see the file!</p>
+        <p>If you can see this page, the files are working correctly.</p>
+        <p>The issue is that the main game needs a local server.</p>
+        <button onclick="showInstructions()">Show Me How to Run</button>
+        <div id="instructions" style="display: none; margin-top: 30px; text-align: left; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px;">
+            <h3>🚀 How to Run GestureX Racing:</h3>
+            <ol style="font-size: 18px; line-height: 2;">
+                <li>Close this page</li>
+                <li>Double-click <strong>START_GAME.bat</strong></li>
+                <li>OR open Command Prompt in this folder</li>
+                <li>Run: <code style="background: #000; padding: 5px;">python -m http.server 8000</code></li>
+                <li>Open browser to: <code style="background: #000; padding: 5px;">http://localhost:8000</code></li>
+            </ol>
+            <p style="margin-top: 20px; color: #f39c12;">
+                ⚠️ <strong>Important:</strong> The game MUST run on a server (localhost) 
+                because it loads 3D models (.glb files) which require HTTP protocol.
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        function showInstructions() {
+            document.getElementById('instructions').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

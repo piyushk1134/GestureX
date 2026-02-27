@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 GestureX Racing v0.13</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/gesturex-theme.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="screen active">
+        <div class="loading-container">
+            <h1 class="loading-title">🎮 GestureX 🎮</h1>
+            <div class="loading-bar-container">
+                <div id="loading-progress" class="loading-bar"></div>
+            </div>
+            <p id="loading-text" class="loading-text">Initializing...</p>
+        </div>
+    </div>
+
+    <!-- Main Menu -->
+    <div id="menu-screen" class="screen">
+        <div class="menu-container">
+            <h1 class="game-title">🎮 GestureX 🎮</h1>
+            <p class="game-subtitle">Gesture Controlled Racing</p>
+            
+            <!-- Theme Toggle Button -->
+            <button class="theme-toggle-btn" id="btn-toggle-theme" title="Toggle Day/Night Mode">
+                <span id="theme-icon">🌙</span> <span id="theme-text">Night Mode</span>
+            </button>
+            
+            <div class="menu-buttons">
+                <button class="menu-btn btn-primary" id="btn-start">START GAME 🏁</button>
+                <button class="menu-btn btn-info" id="btn-select-car">SELECT CAR 🏎️</button>
+                <button class="menu-btn btn-secondary" id="btn-how-to-play">HOW TO PLAY 📖</button>
+                <button class="menu-btn btn-warning" id="btn-settings">SETTINGS ⚙️</button>
+                <button class="menu-btn btn-danger" id="btn-quit">QUIT ❌</button>
+            </div>
+            
+            <div class="menu-features">
+                <p>✋ Real-time hand gesture control</p>
+                <p>📷 No keyboard/mouse needed</p>
+                <p>🎯 Works with any webcam</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- How to Play Screen -->
+    <div id="how-to-play-screen" class="screen">
+        <div class="how-to-play-container">
+            <h1 class="screen-title">📖 HOW TO PLAY</h1>
+            
+            <div class="how-to-play-content">
+                <!-- Quick Start Guide -->
+                <div class="tutorial-section quick-guide">
+                    <h2>🎯 Quick Start</h2>
+                    <p class="quick-desc">Use <strong>W/A/S/D</strong> or <strong>Arrow Keys</strong> to control your car. Avoid obstacles and drive as far as you can!</p>
+                </div>
+                
+                <!-- Controls -->
+                <div class="tutorial-section controls-section">
+                    <h2>🎮 Controls</h2>
+                    <div class="control-simple-grid">
+                        <div class="control-card">
+                            <h3>⌨️ Keyboard</h3>
+                            <div class="control-item"><span class="key">W / ↑</span> Accelerate</div>
+                            <div class="control-item"><span class="key">S / ↓</span> Brake</div>
+                            <div class="control-item"><span class="key">A / ←</span> Left Lane</div>
+                            <div class="control-item"><span class="key">D / →</span> Right Lane</div>
+                        </div>
+                        
+                        <div class="control-card">
+                            <h3>🖐️ Gestures</h3>
+                            <div class="control-item"><span class="gesture">🖐️</span> Accelerate</div>
+                            <div class="control-item"><span class="gesture">✊</span> Brake</div>
+                            <div class="control-item"><span class="gesture">👈</span> Turn Left</div>
+                            <div class="control-item"><span class="gesture">👉</span> Turn Right</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Objectives & Obstacles Combined -->
+                <div class="tutorial-section">
+                    <h2>🎯 Objectives & Obstacles</h2>
+                    <div class="info-grid">
+                        <div class="info-card objective">
+                            <div class="info-icon">🏁</div>
+                            <h3>Drive Far</h3>
+                            <p>Maximize your distance score</p>
+                        </div>
+                        <div class="info-card objective">
+                            <div class="info-icon">❤️</div>
+                            <h3>3 Lives</h3>
+                            <p>Don't lose them all</p>
+                        </div>
+                        <div class="info-card obstacle">
+                            <div class="info-icon">🚗</div>
+                            <h3>Traffic</h3>
+                            <p>Avoid slower cars</p>
+                        </div>
+                        <div class="info-card obstacle">
+                            <div class="info-icon">🕳️</div>
+                            <h3>Potholes</h3>
+                            <p>Dodge road damage</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tips -->
+                <div class="tutorial-section tips-section">
+                    <h2>💡 Pro Tips</h2>
+                    <div class="tips-compact">
+                        <div class="tip-compact">💡 Stay in center lane for more options</div>
+                        <div class="tip-compact">💡 Look ahead to plan your moves</div>
+                        <div class="tip-compact">💡 Sometimes slower is safer</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="how-to-play-buttons">
+                <button class="menu-btn btn-primary btn-large" id="btn-start-from-tutorial">START GAME 🏁</button>
+                <button class="menu-btn btn-secondary" id="btn-back-from-tutorial">BACK ←</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Car Selection Screen -->
+    <div id="car-select-screen" class="screen">
+        <div class="car-select-container">
+            <h1 class="screen-title">🏎️ SELECT YOUR CAR</h1>
+            
+            <div class="car-carousel">
+                <button class="carousel-btn" id="btn-prev-car">◄</button>
+                <div id="car-preview-container" class="car-preview">
+                    <!-- 3D car preview -->
+                </div>
+                <button class="carousel-btn" id="btn-next-car">►</button>
+            </div>
+            
+            <div class="car-info">
+                <h2 id="car-name" class="car-name">Loading...</h2>
+                <p id="car-category" class="car-category">Category</p>
+                
+                <div class="car-stats">
+                    <div class="stat">
+                        <span class="stat-label">⚡ Speed</span>
+                        <div class="stat-bar">
+                            <div id="stat-speed" class="stat-fill"></div>
+                        </div>
+                        <span id="stat-speed-value" class="stat-value">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">🚀 Acceleration</span>
+                        <div class="stat-bar">
+                            <div id="stat-accel" class="stat-fill"></div>
+                        </div>
+                        <span id="stat-accel-value" class="stat-value">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">🎯 Handling</span>
+                        <div class="stat-bar">
+                            <div id="stat-handling" class="stat-fill"></div>
+                        </div>
+                        <span id="stat-handling-value" class="stat-value">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="car-select-buttons">
+                <button class="menu-btn btn-primary" id="btn-confirm-car">SELECT ✓</button>
+                <button class="menu-btn btn-secondary" id="btn-back-from-cars">BACK ←</button>
+            </div>
+            
+            <p class="hint-text">👈/👉 Use gestures or arrows to switch cars</p>
+        </div>
+    </div>
+
+    <!-- Settings Screen -->
+    <div id="settings-screen" class="screen">
+        <div class="settings-container">
+            <h1 class="screen-title">⚙️ SETTINGS</h1>
+            
+            <div class="settings-tabs">
+                <button class="tab-btn active" data-tab="graphics">🎨 Graphics</button>
+                <button class="tab-btn" data-tab="audio">🔊 Audio</button>
+                <button class="tab-btn" data-tab="controls">🖐️ Controls</button>
+                <button class="tab-btn" data-tab="about">ℹ️ About</button>
+            </div>
+            
+            <div class="settings-content">
+                <!-- Graphics Tab -->
+                <div class="tab-content active" id="tab-graphics">
+                    <div class="setting-item">
+                        <label>Quality:</label>
+                        <select id="setting-quality">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high" selected>High</option>
+                            <option value="ultra">Ultra</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label>Shadows:</label>
+                        <input type="checkbox" id="setting-shadows" checked>
+                    </div>
+                    <div class="setting-item">
+                        <label>Effects:</label>
+                        <input type="checkbox" id="setting-effects" checked>
+                    </div>
+                    <div class="setting-item">
+                        <label>FPS Counter:</label>
+                        <input type="checkbox" id="setting-fps">
+                    </div>
+                </div>
+                
+                <!-- Audio Tab -->
+                <div class="tab-content" id="tab-audio">
+                    <div class="setting-item">
+                        <label>Master Volume:</label>
+                        <input type="range" id="setting-master-volume" min="0" max="100" value="70">
+                        <span id="master-volume-value">70%</span>
+                    </div>
+                    <div class="setting-item">
+                        <label>SFX Volume:</label>
+                        <input type="range" id="setting-sfx-volume" min="0" max="100" value="80">
+                        <span id="sfx-volume-value">80%</span>
+                    </div>
+                    <div class="setting-item">
+                        <label>Music Volume:</label>
+                        <input type="range" id="setting-music-volume" min="0" max="100" value="50">
+                        <span id="music-volume-value">50%</span>
+                    </div>
+                    <div class="setting-item">
+                        <label>Mute All:</label>
+                        <input type="checkbox" id="setting-mute">
+                    </div>
+                </div>
+                
+                <!-- Controls Tab -->
+                <div class="tab-content" id="tab-controls">
+                    <div class="setting-item">
+                        <label>Gesture Sensitivity:</label>
+                        <input type="range" id="setting-sensitivity" min="1" max="10" value="5">
+                        <span id="sensitivity-value">5</span>
+                    </div>
+                    <div class="setting-item">
+                        <label>Camera Position:</label>
+                        <select id="setting-camera">
+                            <option value="front" selected>Front</option>
+                            <option value="side">Side</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label>Keyboard Fallback:</label>
+                        <input type="checkbox" id="setting-keyboard" checked>
+                    </div>
+                    <div class="setting-item">
+                        <button class="menu-btn btn-info" id="btn-calibrate">CALIBRATE GESTURES</button>
+                    </div>
+                </div>
+                
+                <!-- About Tab -->
+                <div class="tab-content" id="tab-about">
+                    <div class="about-content">
+                        <h3>GestureX Racing v0.13</h3>
+                        <p>A gesture-controlled 3D racing game</p>
+                        <br>
+                        <p><strong>Features:</strong></p>
+                        <ul>
+                            <li>5 Formula 1 and Supercar models</li>
+                            <li>Real-time hand gesture control</li>
+                            <li>MediaPipe hand tracking</li>
+                            <li>Multiple tracks and game modes</li>
+                        </ul>
+                        <br>
+                        <p><strong>Controls:</strong></p>
+                        <ul>
+                            <li>🖐️ Open Palm - Accelerate</li>
+                            <li>✊ Fist - Brake</li>
+                            <li>👈 Tilt Left - Turn Left</li>
+                            <li>👉 Tilt Right - Turn Right</li>
+                            <li>👍 Thumbs Up - Speed Boost</li>
+                            <li>✌️ Peace Sign - Pause</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-buttons">
+                <button class="menu-btn btn-primary" id="btn-save-settings">SAVE ✓</button>
+                <button class="menu-btn btn-secondary" id="btn-back-from-settings">BACK ←</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calibration Screen -->
+    <div id="calibration-screen" class="screen">
+        <div class="calibration-container">
+            <h1 class="screen-title">🖐️ Gesture Controls</h1>
+            
+            <div class="calibration-content">
+                <!-- Camera Feed -->
+                <div class="camera-container">
+                    <video id="gesture-video" autoplay playsinline style="display:none;"></video>
+                    <canvas id="gesture-canvas"></canvas>
+                    <div class="camera-overlay">
+                        <div id="hand-status" class="hand-status">❌ No Hand Detected</div>
+                        <div id="gesture-text" class="gesture-text">🤷 None</div>
+                    </div>
+                </div>
+                
+                <!-- Gesture Guide -->
+                <div class="gesture-guide">
+                    <h2>📋 Gesture Guide</h2>
+                    <table class="gesture-table">
+                        <tr>
+                            <th>Gesture</th>
+                            <th>Action</th>
+                        </tr>
+                        <tr>
+                            <td>🖐️ Open Palm</td>
+                            <td>Accelerate</td>
+                        </tr>
+                        <tr>
+                            <td>✊ Fist</td>
+                            <td>Brake</td>
+                        </tr>
+                        <tr>
+                            <td>👈 Hand Left</td>
+                            <td>Turn Left</td>
+                        </tr>
+                        <tr>
+                            <td>👉 Hand Right</td>
+                            <td>Turn Right</td>
+                        </tr>
+                        <tr>
+                            <td>👍 Thumbs Up</td>
+                            <td>Boost</td>
+                        </tr>
+                        <tr>
+                            <td>✌️ Peace Sign</td>
+                            <td>Pause</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="calibration-buttons">
+                <button class="menu-btn btn-primary" id="btn-start-race">START RACE (SPACE)</button>
+                <button class="menu-btn btn-secondary" id="btn-back-from-calibration">BACK (ESC)</button>
+            </div>
+            
+            <p class="hint-text">⌨️ Press SPACE to start | ESC to go back</p>
+        </div>
+    </div>
+
+    <!-- Game Screen (3D Canvas) -->
+    <canvas id="game-canvas"></canvas>
+
+    <!-- Game Camera Feed (bottom-left corner) -->
+    <div id="game-camera-feed" class="game-camera-feed hidden">
+        <canvas id="game-gesture-canvas" width="320" height="240"></canvas>
+        <div class="camera-feed-label">
+            <span id="game-hand-status">❌ No Hand</span>
+            <span id="game-gesture-status">None</span>
+        </div>
+    </div>
+
+    <!-- Game HUD -->
+    <div id="game-hud" class="hud hidden">
+        <div class="hud-top-left">
+            <div class="hud-score">🏆 Score: <span id="hud-score">0</span></div>
+            <div class="hud-best">⭐ Highest: <span id="hud-best">0</span></div>
+            <div class="hud-speed">⚡ Speed: <span id="hud-speed">0</span></div>
+        </div>
+        
+        <div class="hud-top-right">
+            <div class="hud-lives">💙 Lives: <span id="hud-lives"></span></div>
+            <div class="hud-time">⏱️ Time: <span id="hud-time">0:00</span></div>
+        
+
+        
+        <!-- Bottom right corner - removed duplicate camera feed -->
+    </div>
+
+    <!-- Pause Menu -->
+    <div id="pause-screen" class="screen overlay">
+        <div class="pause-container">
+            <h1 class="pause-title">⏸️ PAUSED</h1>
+            <div class="pause-buttons">
+                <button class="menu-btn btn-primary" id="btn-resume">RESUME ▶</button>
+                <button class="menu-btn btn-secondary" id="btn-restart">RESTART 🔄</button>
+                <button class="menu-btn btn-danger" id="btn-quit-to-menu">MAIN MENU 🏠</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="gameover-screen" class="screen overlay">
+        <div class="gameover-container">
+            <h1 class="gameover-title">💥 GAME OVER 💥</h1>
+            <div class="gameover-stats">
+                <p class="final-score">🏆 Final Score: <span id="final-score">0</span></p>
+                <p class="high-score" id="high-score-msg">⭐ Highest Score: <span id="final-best">0</span></p>
+            </div>
+            <div class="gameover-buttons">
+                <button class="menu-btn btn-primary" id="btn-play-again">PLAY AGAIN 🔄</button>
+                <button class="menu-btn btn-secondary" id="btn-menu-from-gameover">MAIN MENU 🏠</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MediaPipe Hands - Load BEFORE modules -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    
+    <!-- Import THREE.js -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+    
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

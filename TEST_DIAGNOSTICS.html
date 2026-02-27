@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GestureX Diagnostics</title>
+    <style>
+        body { 
+            background: #1a1a2e; 
+            color: #fff; 
+            font-family: Arial; 
+            padding: 20px;
+        }
+        .test { 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 5px;
+        }
+        .pass { background: #27ae60; }
+        .fail { background: #e74c3c; }
+        video, canvas { 
+            border: 2px solid #3498db; 
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 GestureX Diagnostics</h1>
+    
+    <div id="tests"></div>
+    
+    <h2>Camera Test:</h2>
+    <video id="test-video" width="320" height="240" autoplay playsinline style="display:none;"></video>
+    <canvas id="test-canvas" width="320" height="240"></canvas>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+    
+    <script>
+        const tests = document.getElementById('tests');
+        
+        function addTest(name, passed) {
+            const div = document.createElement('div');
+            div.className = 'test ' + (passed ? 'pass' : 'fail');
+            div.textContent = (passed ? '✅' : '❌') + ' ' + name;
+            tests.appendChild(div);
+        }
+        
+        // Test 1: MediaPipe loaded
+        addTest('MediaPipe Hands loaded', typeof Hands !== 'undefined');
+        addTest('MediaPipe Camera loaded', typeof Camera !== 'undefined');
+        
+        // Test 2: Elements exist
+        const video = document.getElementById('test-video');
+        const canvas = document.getElementById('test-canvas');
+        addTest('Video element exists', video !== null);
+        addTest('Canvas element exists', canvas !== null);
+        
+        // Test 3: Camera access
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                addTest('Camera access granted', true);
+                video.srcObject = stream;
+                
+                // Test 4: MediaPipe initialization
+                try {
+                    const hands = new Hands({
+                        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+                    });
+                    addTest('MediaPipe Hands initialized', true);
+                    
+                    hands.setOptions({
+                        maxNumHands: 1,
+                        minDetectionConfidence: 0.5
+                    });
+                    
+                    hands.onResults((results) => {
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(results.image, 0, 0, 320, 240);
+                        
+                        if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+                            addTest('Hand detected!', true);
+                        }
+                    });
+                    
+                    const camera = new Camera(video, {
+                        onFrame: async () => {
+                            await hands.send({ image: video });
+                        },
+                        width: 320,
+                        height: 240
+                    });
+                    
+                    camera.start();
+                    addTest('Camera started successfully', true);
+                    
+                } catch (error) {
+                    addTest('MediaPipe initialization: ' + error.message, false);
+                }
+            })
+            .catch(error => {
+                addTest('Camera access: ' + error.message, false);
+            });
+    </script>
+</body>
+</html>
