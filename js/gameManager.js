@@ -248,8 +248,13 @@ export class GameManager {
         // Update vehicle
         this.playerVehicle.update(delta, controls);
         
-        // Get vehicle position for obstacle spawning (car stays at Z=0)
+        // Get vehicle speed to move the world
+        const speed = this.playerVehicle.getSpeed();
+        const moveDistance = speed * delta * 0.27778; // Convert km/h to m/s
+        
+        // Car stays at Z=0, get virtual position for tracking
         const vehiclePos = this.playerVehicle.mesh?.position || new THREE.Vector3(0, 0, 0);
+        const virtualZ = this.playerVehicle.position.z; // Virtual position for distance tracking
         
         // Update obstacles
         if (this.obstacleManager) {
@@ -294,61 +299,63 @@ export class GameManager {
         this.gameTime += delta;
         
         // Update distance traveled
-        const speed = this.playerVehicle.getSpeed();
-        this.distance += speed * delta * 0.27778; // Convert km/h to m/s
+        this.distance += moveDistance;
         
         // Update score (based on distance)
         this.score = Math.floor(this.distance);
         
-        // Loop track elements for infinite scrolling effect (each section is 2000m)
-        const sectionLength = 2000;
-        
-        // Loop ground sections
+        // Move all track elements TOWARDS the car (negative Z direction)
+        // Ground sections
         if (this.groundSections) {
             for (let ground of this.groundSections) {
-                // If section is far behind player, move it ahead
-                if (ground.position.z < vehiclePos.z - sectionLength) {
-                    ground.position.z += sectionLength * 2;
+                ground.position.z -= moveDistance;
+                // Loop sections back to front when they pass behind camera
+                if (ground.position.z < -1000) {
+                    ground.position.z += 4000;
                 }
             }
         }
         
-        // Loop track sections
+        // Track sections
         if (this.trackSections) {
             for (let track of this.trackSections) {
-                // If section is far behind player, move it ahead
-                if (track.position.z < vehiclePos.z - sectionLength) {
-                    track.position.z += sectionLength * 2;
+                track.position.z -= moveDistance;
+                // Loop sections back to front
+                if (track.position.z < -1000) {
+                    track.position.z += 4000;
                 }
             }
         }
         
-        // Loop barriers
+        // Barriers (if they exist in obstacle manager)
         if (this.obstacleManager && this.obstacleManager.barriers) {
             for (let barrier of this.obstacleManager.barriers) {
-                // If barrier is far behind player, move it ahead
-                if (barrier.position.z < vehiclePos.z - sectionLength) {
-                    barrier.position.z += sectionLength * 2;
+                barrier.position.z -= moveDistance;
+                // Loop barriers
+                if (barrier.position.z < -1000) {
+                    barrier.position.z += 4000;
                 }
             }
         }
         
-        // Loop lane dashes
+        // Lane dashes
         if (this.laneDashes) {
             for (let dash of this.laneDashes) {
-                // If dash is behind player by more than 200m, move it forward
-                if (vehiclePos.z > dash.position.z + 200) {
-                    dash.position.z += 400; // Move 400m forward
+                dash.position.z -= moveDistance;
+                // Loop dashes when they pass behind
+                if (dash.position.z < -100) {
+                    dash.position.z += 400;
                 }
             }
         }
         
-        // Loop scenery objects (trees)
+        // Scenery objects (trees)
         if (this.sceneryObjects) {
             for (let obj of this.sceneryObjects) {
-                // If tree is behind player by more than 200m, move it forward
-                if (vehiclePos.z > obj.position.z + 200) {
-                    obj.position.z += 400; // Move 400m forward
+                obj.position.z -= moveDistance;
+                // Loop trees when they pass behind
+                if (obj.position.z < -100) {
+                    obj.position.z += 400;
                 }
             }
         }
@@ -445,12 +452,7 @@ export class GameManager {
         if (cameraModeEl) {
             const cameraNames = {
                 'chase': '📷 Chase',
-                'chase_close': '📷 Close Chase',
-                'hood': '📷 Hood',
-                'cockpit': '📷 Cockpit',
-                'chase_far': '📷 Cinematic',
-                'side': '📷 Side View',
-                'front': '📷 Front View'
+                'chase_close': '📷 Close Chase'
             };
             cameraModeEl.textContent = cameraNames[cameraMode] || '📷 ' + cameraMode;
         }
