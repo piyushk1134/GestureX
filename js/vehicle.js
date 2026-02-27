@@ -57,12 +57,28 @@ export class VehicleController {
             // Scale to appropriate size - larger to be more visible
             this.body.scale.set(1.0, 1.0, 1.0);
             
+            // Find and store wheel references to keep them stationary
+            this.wheels = [];
+            
             this.body.traverse((child) => {
                 if (child.isMesh) {
                     child.castShadow = false; // Disabled for 60fps
                     child.receiveShadow = false; // Disabled for 60fps
+                    
+                    // Detect wheels/tires by name (common naming patterns)
+                    const name = child.name.toLowerCase();
+                    if (name.includes('wheel') || name.includes('tire') || name.includes('tyre') || 
+                        name.includes('rim') || name.includes('rotor')) {
+                        this.wheels.push({
+                            mesh: child,
+                            initialRotation: child.rotation.clone() // Store initial rotation
+                        });
+                        console.log(`🛞 Found wheel: ${child.name}`);
+                    }
                 }
             });
+            
+            console.log(`✅ Found ${this.wheels.length} wheels to keep stationary`);
             
             this.scene.add(this.body);
             console.log('✅ Vehicle body added to scene at:', this.body.position);
@@ -132,6 +148,13 @@ export class VehicleController {
         this.body.position.z = 0; // Car stays at origin
         this.body.position.x = this.body.position.x; // Only X changes for lane switching
         this.body.position.y = this.body.position.y; // Y stays constant
+        
+        // Keep wheels stationary (reset to initial rotation)
+        if (this.wheels && this.wheels.length > 0) {
+            for (let wheel of this.wheels) {
+                wheel.mesh.rotation.copy(wheel.initialRotation);
+            }
+        }
         
         // Update camera
         this.updateCamera();
