@@ -443,7 +443,16 @@ export class GameManager {
         const cameraMode = this.playerVehicle.getCameraMode();
         const cameraModeEl = document.getElementById('hud-camera-mode');
         if (cameraModeEl) {
-            cameraModeEl.textContent = cameraMode === 'chase' ? '📷 Chase' : '📷 Hood';
+            const cameraNames = {
+                'chase': '📷 Chase',
+                'chase_close': '📷 Close Chase',
+                'hood': '📷 Hood',
+                'cockpit': '📷 Cockpit',
+                'chase_far': '📷 Cinematic',
+                'side': '📷 Side View',
+                'front': '📷 Front View'
+            };
+            cameraModeEl.textContent = cameraNames[cameraMode] || '📷 ' + cameraMode;
         }
     }
 

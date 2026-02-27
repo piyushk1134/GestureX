@@ -28,8 +28,18 @@ export class VehicleController {
         this.laneSwitchCooldown = 0; // Cooldown timer to prevent multiple switches
         this.laneSwitchCooldownTime = 0.5; // 0.5 seconds between lane changes
         
-        // Camera POV system
-        this.cameraMode = 'chase'; // 'chase' or 'fixed' (cockpit)
+        // Camera POV system - Multiple camera angles like Forza Horizon 5
+        this.cameraMode = 'chase'; // Current camera mode
+        this.cameraModes = [
+            'chase',        // Far chase camera (default)
+            'chase_close',  // Close chase camera
+            'hood',         // Hood/bonnet camera
+            'cockpit',      // First-person cockpit view
+            'chase_far',    // Cinematic far chase
+            'side',         // Side camera angle
+            'front'         // Front camera (looking at car)
+        ];
+        this.currentCameraIndex = 0; // Start with chase camera
         this.cameraToggleCooldown = 0;
         this.cameraToggleCooldownTime = 0.3; // Prevent rapid toggling
         
@@ -39,7 +49,7 @@ export class VehicleController {
         
         console.log(`🏎️ Vehicle created: ${vehicleData.name}`);
         console.log(`🛣️ Lane system: 5 lanes, starting in center (lane ${this.currentLane})`);
-        console.log(`📷 Camera mode: ${this.cameraMode} (toggle with V key)`);
+        console.log(`📷 Camera modes: ${this.cameraModes.length} available (toggle with V key)`);
     }
 
     createBody() {
@@ -132,56 +142,125 @@ export class VehicleController {
     updateCamera() {
         if (!this.camera || !this.body) return;
         
-        if (this.cameraMode === 'chase') {
-            // Chase camera: behind and above the car for better racing POV
-            const cameraOffset = new THREE.Vector3(0, 4, -12);
-            const cameraPosition = new THREE.Vector3();
-            
-            // Position camera relative to car
-            cameraPosition.copy(this.body.position);
-            cameraPosition.add(cameraOffset);
-            
-            // Smooth camera movement for stability
-            this.camera.position.lerp(cameraPosition, 0.1);
-            
-            // Look slightly ahead of the car for better visibility
-            const lookAtPoint = new THREE.Vector3(
-                this.body.position.x,
-                this.body.position.y + 1,
-                this.body.position.z + 5
-            );
-            this.camera.lookAt(lookAtPoint);
-            
-        } else if (this.cameraMode === 'fixed') {
-            // Fixed camera: cockpit/hood view - camera moves with the car
-            const cameraOffset = new THREE.Vector3(0, 2, 2);
-            const cameraPosition = new THREE.Vector3();
-            
-            // Position camera on the car (hood view)
-            cameraPosition.copy(this.body.position);
-            cameraPosition.add(cameraOffset);
-            
-            // Smooth camera movement
-            this.camera.position.lerp(cameraPosition, 0.15);
-            
-            // Look far ahead for fixed camera
-            const lookAtPoint = new THREE.Vector3(
-                this.body.position.x,
-                this.body.position.y + 1,
-                this.body.position.z + 50
-            );
-            this.camera.lookAt(lookAtPoint);
+        let cameraOffset, lookAtPoint, lerpSpeed;
+        
+        switch (this.cameraMode) {
+            case 'chase':
+                // Default chase camera: behind and above the car
+                cameraOffset = new THREE.Vector3(0, 4, -12);
+                lerpSpeed = 0.1;
+                lookAtPoint = new THREE.Vector3(
+                    this.body.position.x,
+                    this.body.position.y + 1,
+                    this.body.position.z + 5
+                );
+                break;
+                
+            case 'chase_close':
+                // Close chase camera: closer to the car for more intense view
+                cameraOffset = new THREE.Vector3(0, 3, -8);
+                lerpSpeed = 0.12;
+                lookAtPoint = new THREE.Vector3(
+                    this.body.position.x,
+                    this.body.position.y + 1,
+                    this.body.position.z + 3
+                );
+                break;
+                
+            case 'hood':
+                // Hood/bonnet camera: on the hood looking forward
+                cameraOffset = new THREE.Vector3(0, 2, 2);
+                lerpSpeed = 0.15;
+                lookAtPoint = new THREE.Vector3(
+                    this.body.position.x,
+                    this.body.position.y + 1,
+                    this.body.position.z + 50
+                );
+                break;
+                
+            case 'cockpit':
+                // Cockpit camera: inside the car, first-person view
+                cameraOffset = new THREE.Vector3(0, 1.5, 0.5);
+                lerpSpeed = 0.2;
+                lookAtPoint = new THREE.Vector3(
+                    this.body.position.x,
+                    this.body.position.y + 1.5,
+                    this.body.position.z + 100
+                );
+                break;
+                
+            case 'chase_far':
+                // Far chase camera: cinematic view from far behind
+                cameraOffset = new THREE.Vector3(0, 6, -20);
+                lerpSpeed = 0.08;
+                lookAtPoint = new THREE.Vector3(
+                    this.body.position.x,
+                    this.body.position.y + 1,
+                    this.body.position.z + 10
+                );
+                break;
+                
+            case 'side':
+                // Side camera: viewing from the side
+                cameraOffset = new THREE.Vector3(-10, 3, -2);
+                lerpSpeed = 0.1;
+                lookAtPoint = new THREE.Vector3(
+                    this.body.position.x,
+                    this.body.position.y + 1,
+                    this.body.position.z + 5
+                );
+                break;
+                
+            case 'front':
+                // Front camera: looking at the car from front
+                cameraOffset = new THREE.Vector3(0, 3, 15);
+                lerpSpeed = 0.1;
+                lookAtPoint = new THREE.Vector3(
+                    this.body.position.x,
+                    this.body.position.y + 1,
+                    this.body.position.z
+                );
+                break;
+                
+            default:
+                // Fallback to chase camera
+                cameraOffset = new THREE.Vector3(0, 4, -12);
+                lerpSpeed = 0.1;
+                lookAtPoint = new THREE.Vector3(
+                    this.body.position.x,
+                    this.body.position.y + 1,
+                    this.body.position.z + 5
+                );
         }
+        
+        // Position camera relative to car
+        const cameraPosition = new THREE.Vector3();
+        cameraPosition.copy(this.body.position);
+        cameraPosition.add(cameraOffset);
+        
+        // Smooth camera movement for stability
+        this.camera.position.lerp(cameraPosition, lerpSpeed);
+        
+        // Look at target point
+        this.camera.lookAt(lookAtPoint);
     }
     
     toggleCameraMode() {
-        if (this.cameraMode === 'chase') {
-            this.cameraMode = 'fixed';
-            console.log('📷 Camera: Fixed (Hood View)');
-        } else {
-            this.cameraMode = 'chase';
-            console.log('📷 Camera: Chase View');
-        }
+        // Cycle through camera modes
+        this.currentCameraIndex = (this.currentCameraIndex + 1) % this.cameraModes.length;
+        this.cameraMode = this.cameraModes[this.currentCameraIndex];
+        
+        const cameraNames = {
+            'chase': 'Chase Camera',
+            'chase_close': 'Close Chase',
+            'hood': 'Hood Camera',
+            'cockpit': 'Cockpit View',
+            'chase_far': 'Far Chase (Cinematic)',
+            'side': 'Side Camera',
+            'front': 'Front Camera'
+        };
+        
+        console.log(`📷 Camera: ${cameraNames[this.cameraMode] || this.cameraMode}`);
     }
     
     getCameraMode() {
