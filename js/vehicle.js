@@ -115,15 +115,25 @@ export class VehicleController {
     updateCamera() {
         if (!this.camera || !this.body) return;
         
-        const cameraOffset = new THREE.Vector3(0, 5, -10);
+        // Camera offset: behind and above the car for better racing POV
+        // x: 0 (centered), y: height above car, z: distance behind car
+        const cameraOffset = new THREE.Vector3(0, 4, -12);
         const cameraPosition = new THREE.Vector3();
         
+        // Position camera relative to car
         cameraPosition.copy(this.body.position);
-        cameraPosition.add(cameraOffset.applyAxisAngle(new THREE.Vector3(0, 1, 0), this.rotation));
+        cameraPosition.add(cameraOffset);
         
-        // Smooth camera movement
+        // Smooth camera movement for stability
         this.camera.position.lerp(cameraPosition, 0.1);
-        this.camera.lookAt(this.body.position);
+        
+        // Look slightly ahead of the car for better visibility
+        const lookAtPoint = new THREE.Vector3(
+            this.body.position.x,
+            this.body.position.y + 1,
+            this.body.position.z + 5
+        );
+        this.camera.lookAt(lookAtPoint);
     }
 
     switchLane(direction) {
