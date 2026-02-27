@@ -1,0 +1,25 @@
+{
+  "name": "gesturex-racing",
+  "version": "1.0.0",
+  "description": "GestureX - A WebGL-based F1 Racing Game with Hand Gesture Controls using MediaPipe",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 8000",
+    "start": "python -m http.server 8000"
+  },
+  "keywords": [
+    "racing-game",
+    "gesture-control",
+    "mediapipe",
+    "threejs",
+    "webgl",
+    "f1-racing",
+    "hand-tracking"
+  ],
+  "author": "piyus",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/gesturex-racing.git"
+  }
+}

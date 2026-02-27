@@ -1,6 +1,14 @@
-# 🎮 GestureX Racing v0.13
+# 🎮 GestureX Racing
 
-A fully-featured **gesture-controlled 3D racing game** built with THREE.js and MediaPipe hand tracking.
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://your-app.vercel.app)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+
+A fully-featured **gesture-controlled 3D racing game** built with THREE.js and MediaPipe hand tracking. Control your F1 car with just your hands - no keyboard or gamepad needed!
+
+🎮 **[Play Live Demo](https://your-app.vercel.app)** | 📚 **[Documentation](./docs/)** | 🐛 **[Report Bug](https://github.com/yourusername/gesturex-racing/issues)**
+
+![GestureX Racing Preview](https://via.placeholder.com/800x400/1a1a2e/16213e?text=GestureX+Racing+Preview)
 
 ---
 
@@ -13,40 +21,43 @@ A fully-featured **gesture-controlled 3D racing game** built with THREE.js and M
 - **F1 Ferrari SF1000** - Speed: 337, Italian stallion
 - **McLaren 765LT** - Speed: 297, Supercar excellence
 
-### 🖐️ **6 Gesture Controls**
-- **🖐️ Open Palm** - Accelerate
-- **✊ Fist** - Brake
-- **👈 Tilt Left** - Turn Left
-- **👉 Tilt Right** - Turn Right
-- **👍 Thumbs Up** - Speed Boost
-- **✌️ Peace Sign** - Pause
+### 🖐️ **Intuitive Gesture Controls**
+| Gesture | Action | Description |
+|---------|--------|-------------|
+| 🖐️ Open Palm | Accelerate | Push forward to speed up |
+| ✊ Fist | Brake | Make a fist to slow down |
+| 👈 Tilt Left | Turn Left | Tilt your hand left |
+| 👉 Tilt Right | Turn Right | Tilt your hand right |
+| 👍 Thumbs Up | Speed Boost | Get a temporary boost |
+| ✌️ Peace Sign | Pause | Take a break |
 
 ### 🎨 **Complete UI System**
-- **Home Screen** - Rotating 3D car preview
-- **Car Selection** - Interactive carousel with stats
-- **Settings Menu** - Graphics, Audio, Controls, About
+- **Home Screen** - Rotating 3D car preview with stunning visuals
+- **Car Selection** - Interactive carousel with detailed stats
+- **Settings Menu** - Graphics, Audio, Controls, and About sections
 - **Calibration Screen** - Real-time hand detection training
 - **Enhanced HUD** - Score, speed, lives, gesture indicators
-- **Pause/Game Over** - Professional overlays
+- **Pause/Game Over** - Professional overlays with restart options
 
 ### ⚙️ **Advanced Features**
-- **State Management** - Smooth transitions between screens
-- **Settings Persistence** - LocalStorage saves your preferences
-- **High Score System** - Track your best performances
-- **Keyboard Fallback** - Play with keyboard if needed
-- **Responsive Design** - Works on all screen sizes
-- **Performance Options** - Low to Ultra quality presets
+- ✅ **State Management** - Smooth transitions between game screens
+- 💾 **Settings Persistence** - LocalStorage saves your preferences
+- 🏆 **High Score System** - Track your best performances
+- ⌨️ **Keyboard Fallback** - Play with keyboard controls if needed
+- 📱 **Responsive Design** - Works on desktop and tablet
+- 🎛️ **Performance Options** - Low to Ultra quality presets for all devices
 
 ---
 
 ## 🚀 Quick Start
 
 ### **Prerequisites**
-- Modern web browser (Chrome, Firefox, Edge)
+- Modern web browser (Chrome 90+, Firefox 88+, Edge 90+)
 - Webcam for gesture control
-- HTTPS or localhost (for camera access)
+- Good lighting for optimal hand tracking
+- HTTPS or localhost (required for camera access)
 
-### **Installation**
+### **Installation & Running Locally**
 
 1. **Open in Browser**
    ```
