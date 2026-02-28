@@ -804,14 +804,17 @@ class GestureXRacing {
     
     updateFPSCounter(delta) {
         // Only update if FPS counter is enabled
-        if (!this.settingsManager?.settings?.graphics?.fps) return;
+        if (!this.settingsManager?.settings?.graphics?.fps) {
+            return;
+        }
         
         this.fpsFrames++;
         this.fpsTime += delta;
         
-        // Update FPS display every 0.5 seconds
-        if (this.fpsTime >= 0.5) {
-            this.currentFPS = Math.round(this.fpsFrames / this.fpsTime);
+        // Update FPS display every second for more accurate reading
+        if (this.fpsTime >= 1.0) {
+            // FPS = frames / time = frames per second
+            this.currentFPS = Math.round(this.fpsFrames);
             this.fpsFrames = 0;
             this.fpsTime = 0;
             
