@@ -1,0 +1,490 @@
+/* ═══════════════════════════════════════════════════════════════
+   GESTUREX RACING - MODERN UI REDESIGN
+   Professional, sleek, and immersive interface
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════
+   ROOT VARIABLES - Modern Color Palette
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+    /* Primary Colors */
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    
+    /* UI Colors */
+    --bg-dark: #0f0f23;
+    --bg-card: rgba(20, 20, 40, 0.95);
+    --bg-overlay: rgba(0, 0, 0, 0.85);
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-muted: rgba(255, 255, 255, 0.5);
+    
+    /* Accent Colors */
+    --accent-blue: #667eea;
+    --accent-purple: #764ba2;
+    --accent-pink: #f5576c;
+    --accent-cyan: #00f2fe;
+    
+    /* Glass Morphism */
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-blur: blur(10px);
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 5px 20px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.5);
+    
+    /* Glow Effects */
+    --glow-blue: 0 0 20px rgba(102, 126, 234, 0.5);
+    --glow-purple: 0 0 20px rgba(118, 75, 162, 0.5);
+    --glow-cyan: 0 0 20px rgba(0, 242, 254, 0.5);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MAIN MENU - Redesigned
+   ═══════════════════════════════════════════════════════════════ */
+#menu-screen.active {
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animated Background Pattern - Only when active */
+#menu-screen.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+    animation: pulseBackground 10s ease-in-out infinite;
+    z-index: 0;
+}
+
+@keyframes pulseBackground {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+}
+
+.menu-container {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* Game Logo */
+.game-title {
+    font-size: clamp(48px, 8vw, 96px);
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 20px;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 40px rgba(102, 126, 234, 0.3);
+    letter-spacing: -2px;
+    animation: titleFloat 3s ease-in-out infinite;
+}
+
+@keyframes titleFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.game-subtitle {
+    text-align: center;
+    font-size: clamp(14px, 2vw, 18px);
+    color: var(--text-secondary);
+    margin-bottom: 50px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* Modern Menu Buttons */
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.btn-modern {
+    position: relative;
+    padding: 18px 32px;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 15px;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 2px solid var(--glass-border);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.btn-modern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--primary-gradient);
+    transition: left 0.4s ease;
+    z-index: -1;
+}
+
+.btn-modern:hover::before {
+    left: 0;
+}
+
+.btn-modern:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: var(--shadow-lg), var(--glow-blue);
+    border-color: var(--accent-blue);
+}
+
+.btn-modern:active {
+    transform: translateY(-2px) scale(0.98);
+}
+
+.btn-modern.primary {
+    background: var(--primary-gradient);
+    border-color: transparent;
+    box-shadow: var(--shadow-lg), var(--glow-blue);
+    animation: buttonPulse 2s ease-in-out infinite;
+}
+
+@keyframes buttonPulse {
+    0%, 100% { box-shadow: var(--shadow-lg), 0 0 20px rgba(102, 126, 234, 0.5); }
+    50% { box-shadow: var(--shadow-xl), 0 0 30px rgba(102, 126, 234, 0.8); }
+}
+
+.btn-modern.primary:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GAME OVER SCREEN - Enhanced
+   ═══════════════════════════════════════════════════════════════ */
+#gameover-screen {
+    background: var(--bg-overlay);
+    backdrop-filter: blur(20px);
+}
+
+.gameover-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.gameover-title {
+    font-size: clamp(48px, 10vw, 96px);
+    font-weight: 900;
+    margin-bottom: 20px;
+    background: var(--secondary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gameOverAppear 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes gameOverAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.5) translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.score-display {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 2px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 30px;
+    margin: 30px 0;
+    box-shadow: var(--shadow-lg);
+}
+
+.score-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.score-item:last-child {
+    border-bottom: none;
+}
+
+.score-label {
+    font-size: 16px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.score-value {
+    font-size: 32px;
+    font-weight: 900;
+    background: var(--success-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.score-value.highlight {
+    font-size: 48px;
+    animation: scoreGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes scoreGlow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HUD - Modern Redesign
+   ═══════════════════════════════════════════════════════════════ */
+#game-hud {
+    pointer-events: none;
+}
+
+.hud-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.hud-item-modern {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 2px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 12px 20px;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.hud-icon {
+    font-size: 24px;
+    filter: drop-shadow(0 0 8px currentColor);
+}
+
+.hud-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.hud-value {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--text-primary);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SETTINGS SCREEN - Modern Design
+   ═══════════════════════════════════════════════════════════════ */
+.settings-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    overflow-x: auto;
+}
+
+.tab-btn-modern {
+    padding: 12px 24px;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 2px solid var(--glass-border);
+    border-radius: 10px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.tab-btn-modern.active {
+    background: var(--primary-gradient);
+    border-color: transparent;
+    color: white;
+    box-shadow: var(--shadow-md), var(--glow-blue);
+}
+
+.setting-group-modern {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 2px solid var(--glass-border);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.setting-group-modern h3 {
+    color: var(--accent-blue);
+    margin-bottom: 15px;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CAMERA FEED - Enhanced
+   ═══════════════════════════════════════════════════════════════ */
+.game-camera-feed {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 3px solid var(--accent-cyan);
+    box-shadow: var(--shadow-lg), var(--glow-cyan);
+    animation: cameraFeedPulse 2s ease-in-out infinite;
+}
+
+@keyframes cameraFeedPulse {
+    0%, 100% { border-color: var(--accent-cyan); }
+    50% { border-color: var(--accent-blue); }
+}
+
+.camera-feed-label {
+    background: var(--accent-cyan);
+    color: var(--bg-dark);
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 0 0 8px 8px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PAUSE SCREEN - Modern
+   ═══════════════════════════════════════════════════════════════ */
+#pause-screen {
+    background: var(--bg-overlay);
+    backdrop-filter: blur(20px);
+}
+
+.pause-title {
+    font-size: 64px;
+    font-weight: 900;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 40px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN
+   ═══════════════════════════════════════════════════════════════ */
+@media screen and (max-width: 768px) {
+    .menu-container {
+        padding: 20px 15px;
+    }
+    
+    .btn-modern {
+        padding: 15px 24px;
+        font-size: 16px;
+    }
+    
+    .score-display {
+        padding: 20px;
+    }
+    
+    .score-value {
+        font-size: 24px;
+    }
+    
+    .score-value.highlight {
+        font-size: 36px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .game-title {
+        font-size: 48px;
+    }
+    
+    .btn-modern {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+    
+    .gameover-title {
+        font-size: 48px;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATIONS & EFFECTS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Fade In Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Slide In Animation */
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.slide-in {
+    animation: slideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Performance Mode */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

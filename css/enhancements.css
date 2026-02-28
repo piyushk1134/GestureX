@@ -1,0 +1,408 @@
+/* Enhanced UI Polish & Visual Effects */
+
+/* Achievement Notifications */
+.achievement-notification {
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-width: 350px;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.achievement-notification.show {
+    top: 20px;
+    animation: achievementPulse 0.5s ease-in-out;
+}
+
+@keyframes achievementPulse {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.05); }
+}
+
+.achievement-icon {
+    font-size: 48px;
+    animation: rotateIcon 2s ease-in-out infinite;
+}
+
+@keyframes rotateIcon {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(-10deg) scale(1.1); }
+    75% { transform: rotate(10deg) scale(1.1); }
+}
+
+.achievement-content {
+    flex: 1;
+}
+
+.achievement-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.9;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.achievement-name {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.achievement-desc {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+/* Enhanced HUD - Speedometer Gauge */
+.speedometer-gauge {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 150px;
+    height: 150px;
+    z-index: 101;
+}
+
+.gauge-background {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 100%);
+    border: 5px solid rgba(52, 152, 219, 0.5);
+    box-shadow: 0 0 20px rgba(52, 152, 219, 0.3),
+                inset 0 0 20px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.gauge-needle {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    width: 4px;
+    height: 60px;
+    background: linear-gradient(to top, #e74c3c, #ff6b6b);
+    transform-origin: bottom center;
+    transform: translateX(-50%) rotate(-90deg);
+    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(231, 76, 60, 0.8);
+}
+
+.gauge-center {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    background: #e74c3c;
+    border-radius: 50%;
+    transform: translate(-50%, 50%);
+    box-shadow: 0 0 10px rgba(231, 76, 60, 0.6);
+}
+
+.gauge-speed {
+    position: absolute;
+    bottom: 35%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    font-weight: bold;
+    color: #3498db;
+    text-shadow: 0 0 10px rgba(52, 152, 219, 0.8);
+}
+
+.gauge-label {
+    position: absolute;
+    bottom: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Boost Meter */
+.boost-meter {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    width: 200px;
+    z-index: 101;
+}
+
+.boost-meter-label {
+    color: #3498db;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.boost-meter-bar {
+    width: 100%;
+    height: 30px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 15px;
+    overflow: hidden;
+    border: 2px solid rgba(52, 152, 219, 0.5);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5),
+                inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.boost-meter-fill {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #00d4ff 0%, #0099ff 50%, #00ffff 100%);
+    border-radius: 13px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+    animation: boostPulse 1s ease-in-out infinite;
+}
+
+@keyframes boostPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.boost-meter-fill.active {
+    animation: boostActive 0.3s ease-in-out infinite;
+}
+
+@keyframes boostActive {
+    0%, 100% { 
+        background: linear-gradient(90deg, #00ff00 0%, #00ff88 50%, #00ffff 100%);
+        box-shadow: 0 0 30px rgba(0, 255, 0, 1);
+    }
+    50% { 
+        background: linear-gradient(90deg, #00ffff 0%, #00ff88 50%, #00ff00 100%);
+        box-shadow: 0 0 40px rgba(0, 255, 255, 1);
+    }
+}
+
+/* Combo Multiplier Display */
+.combo-display {
+    position: fixed;
+    top: 100px;
+    right: 30px;
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.9) 0%, rgba(231, 76, 60, 0.9) 100%);
+    padding: 15px 25px;
+    border-radius: 10px;
+    z-index: 102;
+    opacity: 0;
+    transform: scale(0.5) translateY(-20px);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+}
+
+.combo-display.active {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+
+.combo-text {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.combo-value {
+    font-size: 36px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    animation: comboGlow 1s ease-in-out infinite;
+}
+
+@keyframes comboGlow {
+    0%, 100% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.8); }
+    50% { text-shadow: 0 0 20px rgba(255, 255, 255, 1); }
+}
+
+/* Loading Tips - REMOVED - Now in loading-screen-modern.css */
+
+/* Menu Animations */
+.menu-btn {
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.menu-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 30px rgba(52, 152, 219, 0.5);
+}
+
+.menu-btn:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+/* Particle Trail Indicator */
+.speed-indicator {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 4px;
+    pointer-events: none;
+    z-index: 99;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.speed-indicator.active {
+    opacity: 1;
+}
+
+.speed-line {
+    position: absolute;
+    height: 100%;
+    width: 200px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.6) 50%, 
+        transparent 100%);
+    animation: speedLineMove 0.5s linear infinite;
+}
+
+@keyframes speedLineMove {
+    from { left: -200px; }
+    to { left: 100%; }
+}
+
+/* Distance Milestone Popup */
+.milestone-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    padding: 40px 60px;
+    border-radius: 20px;
+    z-index: 10001;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.milestone-popup.show {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+.milestone-icon {
+    font-size: 72px;
+    margin-bottom: 20px;
+    animation: milestoneFloat 2s ease-in-out infinite;
+}
+
+@keyframes milestoneFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.milestone-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.milestone-subtitle {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 768px) {
+    .speedometer-gauge {
+        width: 100px;
+        height: 100px;
+        bottom: 20px;
+        right: 20px;
+    }
+    
+    .gauge-speed {
+        font-size: 18px;
+    }
+    
+    .boost-meter {
+        width: 150px;
+        bottom: 20px;
+        left: 20px;
+    }
+    
+    .combo-display {
+        top: 80px;
+        right: 20px;
+        padding: 10px 20px;
+    }
+    
+    .combo-value {
+        font-size: 28px;
+    }
+    
+    .achievement-notification {
+        min-width: 280px;
+        padding: 15px 20px;
+    }
+    
+    .achievement-icon {
+        font-size: 36px;
+    }
+    
+    .achievement-name {
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .speedometer-gauge {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .gauge-speed {
+        font-size: 14px;
+    }
+    
+    .boost-meter {
+        width: 120px;
+    }
+    
+    .boost-meter-bar {
+        height: 20px;
+    }
+}
+
+/* Performance mode - reduced animations */
+@media (prefers-reduced-motion: reduce) {
+    .achievement-notification,
+    .combo-display,
+    .milestone-popup {
+        transition: opacity 0.3s ease;
+    }
+    
+    .achievement-icon,
+    .combo-value,
+    .milestone-icon {
+        animation: none;
+    }
+}

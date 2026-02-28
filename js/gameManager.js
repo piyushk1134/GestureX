@@ -62,10 +62,10 @@ export class GameManager {
         console.log('✅ GAME READY!');
         console.log('════════════════════════════════════════════');
         console.log('🎮 Controls:');
-        console.log('  W/↑ - Accelerate');
-        console.log('  S/↓ - Brake');
-        console.log('  A/← - Turn Left');
-        console.log('  D/→ - Turn Right');
+        console.log('  Keyboard: W/↑ - Accelerate | S/↓ - Brake');
+        console.log('           D/→ - Turn Left  | A/← - Turn Right');
+        console.log('  Gestures: 🖐️ Open Hand | ✊ Fist | 👈👉 Point');
+        console.log('  Touch:    📱 On-screen buttons & swipes');
         console.log('════════════════════════════════════════════');
         console.log('');
     }
@@ -170,78 +170,395 @@ export class GameManager {
     }
     
     createScenery() {
-        // Add trees along the side - Store for repeating
+        // Initialize scenery arrays
         this.sceneryObjects = [];
+        this.buildingObjects = [];
+        this.mountainObjects = [];
+        this.cloudObjects = [];
         
-        // Create fewer trees for better performance (every 80m instead of 50m)
-        for (let i = -200; i < 200; i += 80) {
-            // Left side
+        // Create distant mountains (static background)
+        this.createMountains();
+        
+        // Create buildings along the roadside
+        this.createBuildings();
+        
+        // Create trees along the side
+        for (let i = -200; i < 200; i += 60) {
+            // Left side - varied positioning
             const leftTree = this.createTree();
-            leftTree.position.set(-25, 0, i + Math.random() * 30);
+            leftTree.position.set(-22 + Math.random() * 4, 0, i + Math.random() * 20);
             this.game.scene.add(leftTree);
             this.sceneryObjects.push(leftTree);
             
-            // Right side
+            // Right side - varied positioning
             const rightTree = this.createTree();
-            rightTree.position.set(25, 0, i + Math.random() * 30);
+            rightTree.position.set(22 + Math.random() * 4, 0, i + Math.random() * 20);
             this.game.scene.add(rightTree);
             this.sceneryObjects.push(rightTree);
         }
+        
+        // Add street lamps along the road
+        for (let i = -200; i < 200; i += 40) {
+            // Left side lamp
+            const leftLamp = this.createStreetLamp();
+            leftLamp.position.set(-12, 0, i);
+            this.game.scene.add(leftLamp);
+            this.sceneryObjects.push(leftLamp);
+            
+            // Right side lamp
+            const rightLamp = this.createStreetLamp();
+            rightLamp.position.set(12, 0, i);
+            this.game.scene.add(rightLamp);
+            this.sceneryObjects.push(rightLamp);
+        }
+        
+        // Add billboards
+        for (let i = -200; i < 200; i += 120) {
+            if (Math.random() > 0.5) {
+                const billboard = this.createBillboard();
+                billboard.position.set(-28, 0, i);
+                this.game.scene.add(billboard);
+                this.sceneryObjects.push(billboard);
+            } else {
+                const billboard = this.createBillboard();
+                billboard.position.set(28, 0, i);
+                this.game.scene.add(billboard);
+                this.sceneryObjects.push(billboard);
+            }
+        }
+        
+        // Create clouds in the sky
+        this.createClouds();
+        
+        console.log(`✅ Created detailed scenery: ${this.sceneryObjects.length} roadside objects, ${this.buildingObjects.length} buildings, ${this.mountainObjects.length} mountains, ${this.cloudObjects.length} clouds`);
     }
     
     createTree() {
         // Create a tree group with trunk and foliage
         const tree = new THREE.Group();
         
+        // Random tree variation
+        const treeType = Math.floor(Math.random() * 3);
+        
         // Brown trunk (optimized geometry)
-        const trunkGeometry = new THREE.CylinderGeometry(0.3, 0.4, 3, 6); // Reduced from 8 to 6 segments
-        const trunkMaterial = new THREE.MeshLambertMaterial({ // Lambert is cheaper than Standard
+        const trunkHeight = 2.5 + Math.random() * 1.5;
+        const trunkGeometry = new THREE.CylinderGeometry(0.3, 0.4, trunkHeight, 6);
+        const trunkMaterial = new THREE.MeshLambertMaterial({ 
             color: 0x8B4513 // Brown
         });
         const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
-        trunk.position.y = 1.5; // Half of trunk height
-        trunk.castShadow = false; // Disabled for 60fps
+        trunk.position.y = trunkHeight / 2;
+        trunk.castShadow = false;
         tree.add(trunk);
         
-        // Green foliage (3 spheres stacked)
-        const foliageMaterial = new THREE.MeshLambertMaterial({ // Lambert is cheaper than Standard
-            color: 0x228B22 // Forest green
+        // Different foliage colors for variety
+        const foliageColors = [0x228B22, 0x2E8B57, 0x3CB371];
+        const foliageMaterial = new THREE.MeshLambertMaterial({ 
+            color: foliageColors[treeType]
         });
         
-        // Bottom foliage sphere (reduced geometry for performance)
+        // Green foliage (3 spheres stacked)
         const foliage1 = new THREE.Mesh(
-            new THREE.SphereGeometry(1.5, 6, 6), // Reduced from 8x8 to 6x6
+            new THREE.SphereGeometry(1.5, 6, 6),
             foliageMaterial
         );
-        foliage1.position.y = 3.5;
-        foliage1.castShadow = false; // Disabled for 60fps
+        foliage1.position.y = trunkHeight + 1;
+        foliage1.castShadow = false;
         tree.add(foliage1);
         
-        // Middle foliage sphere (reduced geometry for performance)
         const foliage2 = new THREE.Mesh(
-            new THREE.SphereGeometry(1.2, 6, 6), // Reduced from 8x8 to 6x6
+            new THREE.SphereGeometry(1.2, 6, 6),
             foliageMaterial
         );
-        foliage2.position.y = 4.5;
-        foliage2.castShadow = false; // Disabled for 60fps
+        foliage2.position.y = trunkHeight + 2;
+        foliage2.castShadow = false;
         tree.add(foliage2);
         
-        // Top foliage sphere (reduced geometry for performance)
         const foliage3 = new THREE.Mesh(
-            new THREE.SphereGeometry(0.9, 6, 6), // Reduced from 8x8 to 6x6
+            new THREE.SphereGeometry(0.9, 6, 6),
             foliageMaterial
         );
-        foliage3.position.y = 5.3;
-        foliage3.castShadow = false; // Disabled for 60fps
+        foliage3.position.y = trunkHeight + 2.8;
+        foliage3.castShadow = false;
         tree.add(foliage3);
         
         return tree;
+    }
+    
+    createMountains() {
+        // Create distant mountain range (far background)
+        const mountainCount = 8;
+        
+        for (let i = 0; i < mountainCount; i++) {
+            const mountain = new THREE.Group();
+            
+            // Random mountain size and shape
+            const height = 30 + Math.random() * 40;
+            const width = 25 + Math.random() * 20;
+            
+            // Mountain geometry (cone)
+            const geometry = new THREE.ConeGeometry(width, height, 4);
+            const material = new THREE.MeshLambertMaterial({ 
+                color: 0x4A4A4A,
+                flatShading: true
+            });
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.y = height / 2;
+            mesh.rotation.y = Math.random() * Math.PI;
+            mountain.add(mesh);
+            
+            // Snow cap
+            const snowHeight = height * 0.3;
+            const snowGeometry = new THREE.ConeGeometry(width * 0.5, snowHeight, 4);
+            const snowMaterial = new THREE.MeshLambertMaterial({ 
+                color: 0xFFFFFF
+            });
+            const snow = new THREE.Mesh(snowGeometry, snowMaterial);
+            snow.position.y = height - snowHeight / 2;
+            mountain.add(snow);
+            
+            // Position mountains far in the background
+            const side = i % 2 === 0 ? -1 : 1;
+            const distance = 150 + Math.random() * 50;
+            mountain.position.set(
+                side * distance,
+                0,
+                -100 + (i * 80) + Math.random() * 40
+            );
+            
+            this.game.scene.add(mountain);
+            this.mountainObjects.push(mountain);
+        }
+    }
+    
+    createBuildings() {
+        // Create cityscape buildings in the background
+        for (let i = -200; i < 200; i += 50) {
+            // Left side buildings
+            if (Math.random() > 0.3) {
+                const building = this.createBuilding();
+                building.position.set(-50 - Math.random() * 30, 0, i + Math.random() * 30);
+                this.game.scene.add(building);
+                this.buildingObjects.push(building);
+            }
+            
+            // Right side buildings
+            if (Math.random() > 0.3) {
+                const building = this.createBuilding();
+                building.position.set(50 + Math.random() * 30, 0, i + Math.random() * 30);
+                this.game.scene.add(building);
+                this.buildingObjects.push(building);
+            }
+        }
+    }
+    
+    createBuilding() {
+        const building = new THREE.Group();
+        
+        // Random building dimensions
+        const width = 8 + Math.random() * 8;
+        const height = 15 + Math.random() * 30;
+        const depth = 8 + Math.random() * 8;
+        
+        // Main building structure
+        const geometry = new THREE.BoxGeometry(width, height, depth);
+        const buildingColors = [0x505050, 0x606060, 0x4A5B6C, 0x5A6B7C];
+        const material = new THREE.MeshLambertMaterial({ 
+            color: buildingColors[Math.floor(Math.random() * buildingColors.length)]
+        });
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.position.y = height / 2;
+        building.add(mesh);
+        
+        // Add fake windows to the building
+        this.addFakeWindows(building, width, height, depth);
+        
+        return building;
+    }
+    
+    addFakeWindows(building, width, height, depth) {
+        // Window configuration
+        const windowWidth = 1.2;
+        const windowHeight = 1.8;
+        const horizontalSpacing = 2.2;
+        const verticalSpacing = 2.5;
+        
+        // Calculate number of floors to fill the entire height
+        const bottomMargin = 1.5;
+        const topMargin = 1.5;
+        const availableHeight = height - bottomMargin - topMargin;
+        const numFloors = Math.ceil(availableHeight / verticalSpacing);
+        const adjustedSpacing = availableHeight / numFloors;
+        
+        // Calculate actual coverage
+        const firstWindowY = bottomMargin;
+        const lastWindowY = bottomMargin + ((numFloors - 1) * adjustedSpacing);
+        const topGap = height - lastWindowY - topMargin;
+        
+        console.log(`✅ Building: h=${height.toFixed(1)}m, floors=${numFloors}, spacing=${adjustedSpacing.toFixed(2)}m`);
+        console.log(`   Windows from ${firstWindowY.toFixed(1)}m to ${lastWindowY.toFixed(1)}m (gap at top: ${topGap.toFixed(1)}m)`);
+        
+        // Create a simple glowing window material
+        const createWindowMaterial = () => {
+            const isLit = Math.random() > 0.25; // 75% chance of being lit
+            if (isLit) {
+                // Random bright window colors (MeshBasicMaterial only uses 'color')
+                const colors = [
+                    0xffff99, // Warm yellow
+                    0xffffff, // Bright white
+                    0xffcc66  // Orange
+                ];
+                const windowColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                return new THREE.MeshBasicMaterial({
+                    color: windowColor
+                });
+            } else {
+                return new THREE.MeshBasicMaterial({
+                    color: 0x1a1a2e
+                });
+            }
+        };
+        
+        const windowGeometry = new THREE.PlaneGeometry(windowWidth, windowHeight);
+        
+        // Add windows to front face (Z+) - from bottom to top with adjusted spacing
+        for (let floor = 0; floor < numFloors; floor++) {
+            const y = bottomMargin + (floor * adjustedSpacing);
+            for (let x = -width/2 + horizontalSpacing; x < width/2; x += horizontalSpacing) {
+                const window = new THREE.Mesh(windowGeometry, createWindowMaterial());
+                window.position.set(x, y - height/2, depth/2 + 0.1);
+                building.add(window);
+            }
+        }
+        
+        // Add windows to back face (Z-) - from bottom to top
+        for (let floor = 0; floor < numFloors; floor++) {
+            const y = bottomMargin + (floor * adjustedSpacing);
+            for (let x = -width/2 + horizontalSpacing; x < width/2; x += horizontalSpacing) {
+                const window = new THREE.Mesh(windowGeometry, createWindowMaterial());
+                window.position.set(x, y - height/2, -depth/2 - 0.1);
+                window.rotation.y = Math.PI;
+                building.add(window);
+            }
+        }
+        
+        // Add windows to left face (X-) - from bottom to top
+        for (let floor = 0; floor < numFloors; floor++) {
+            const y = bottomMargin + (floor * adjustedSpacing);
+            for (let z = -depth/2 + horizontalSpacing; z < depth/2; z += horizontalSpacing) {
+                const window = new THREE.Mesh(windowGeometry, createWindowMaterial());
+                window.position.set(-width/2 - 0.1, y - height/2, z);
+                window.rotation.y = -Math.PI / 2;
+                building.add(window);
+            }
+        }
+        
+        // Add windows to right face (X+) - from bottom to top
+        for (let floor = 0; floor < numFloors; floor++) {
+            const y = bottomMargin + (floor * adjustedSpacing);
+            for (let z = -depth/2 + horizontalSpacing; z < depth/2; z += horizontalSpacing) {
+                const window = new THREE.Mesh(windowGeometry, createWindowMaterial());
+                window.position.set(width/2 + 0.1, y - height/2, z);
+                window.rotation.y = Math.PI / 2;
+                building.add(window);
+            }
+        }
+    }
+    
+    createStreetLamp() {
+        const lamp = new THREE.Group();
+        
+        // Pole
+        const poleGeometry = new THREE.CylinderGeometry(0.15, 0.15, 6, 6);
+        const poleMaterial = new THREE.MeshLambertMaterial({ color: 0x333333 });
+        const pole = new THREE.Mesh(poleGeometry, poleMaterial);
+        pole.position.y = 3;
+        lamp.add(pole);
+        
+        // Lamp head
+        const headGeometry = new THREE.SphereGeometry(0.4, 8, 6);
+        const headMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0xFFFF99,
+            emissive: 0xFFFF66,
+            emissiveIntensity: 0.5
+        });
+        const head = new THREE.Mesh(headGeometry, headMaterial);
+        head.position.y = 6;
+        lamp.add(head);
+        
+        return lamp;
+    }
+    
+    createBillboard() {
+        const billboard = new THREE.Group();
+        
+        // Support pole
+        const poleGeometry = new THREE.CylinderGeometry(0.2, 0.2, 8, 6);
+        const poleMaterial = new THREE.MeshLambertMaterial({ color: 0x444444 });
+        const pole = new THREE.Mesh(poleGeometry, poleMaterial);
+        pole.position.y = 4;
+        billboard.add(pole);
+        
+        // Billboard board
+        const boardGeometry = new THREE.BoxGeometry(8, 4, 0.2);
+        const billboardColors = [0xFF6B6B, 0x4ECDC4, 0xFFE66D, 0x95E1D3];
+        const boardMaterial = new THREE.MeshLambertMaterial({ 
+            color: billboardColors[Math.floor(Math.random() * billboardColors.length)]
+        });
+        const board = new THREE.Mesh(boardGeometry, boardMaterial);
+        board.position.y = 8;
+        billboard.add(board);
+        
+        return billboard;
+    }
+    
+    createClouds() {
+        // Create fluffy clouds in the sky
+        for (let i = 0; i < 12; i++) {
+            const cloud = this.createCloud();
+            cloud.position.set(
+                -100 + Math.random() * 200,
+                40 + Math.random() * 20,
+                -150 + i * 60 + Math.random() * 40
+            );
+            this.game.scene.add(cloud);
+            this.cloudObjects.push(cloud);
+        }
+    }
+    
+    createCloud() {
+        const cloud = new THREE.Group();
+        const cloudMaterial = new THREE.MeshLambertMaterial({ 
+            color: 0xFFFFFF,
+            transparent: true,
+            opacity: 0.8
+        });
+        
+        // Create cloud from multiple spheres
+        const sphereCount = 3 + Math.floor(Math.random() * 3);
+        for (let i = 0; i < sphereCount; i++) {
+            const size = 3 + Math.random() * 4;
+            const geometry = new THREE.SphereGeometry(size, 6, 6);
+            const sphere = new THREE.Mesh(geometry, cloudMaterial);
+            sphere.position.set(
+                (i - sphereCount / 2) * 4,
+                Math.random() * 2,
+                Math.random() * 2
+            );
+            cloud.add(sphere);
+        }
+        
+        return cloud;
     }
 
     update(delta) {
         if (!this.playerVehicle) return;
         
-        // Get input from gesture control or keyboard
+        // Stop updating if game is over
+        if (this.isGameOver) return;
+        
+        // Get input from gesture control, touch, and keyboard
         const gestureInput = this.game.gestureControl?.getGestureInput();
         const controls = this.getControls(gestureInput);
         
@@ -305,7 +622,9 @@ export class GameManager {
         this.score = Math.floor(this.distance);
         
         // Move all track elements TOWARDS the car (negative Z direction)
-        // Ground sections
+        // Use smooth, consistent movement for all track elements
+        
+        // Ground sections - smooth movement
         if (this.groundSections) {
             for (let ground of this.groundSections) {
                 ground.position.z -= moveDistance;
@@ -316,7 +635,7 @@ export class GameManager {
             }
         }
         
-        // Track sections
+        // Track sections - smooth movement
         if (this.trackSections) {
             for (let track of this.trackSections) {
                 track.position.z -= moveDistance;
@@ -327,7 +646,7 @@ export class GameManager {
             }
         }
         
-        // Barriers (if they exist in obstacle manager)
+        // Barriers - smooth movement with same speed as track
         if (this.obstacleManager && this.obstacleManager.barriers) {
             for (let barrier of this.obstacleManager.barriers) {
                 barrier.position.z -= moveDistance;
@@ -338,7 +657,7 @@ export class GameManager {
             }
         }
         
-        // Lane dashes
+        // Lane dashes - smooth, synchronized movement
         if (this.laneDashes) {
             for (let dash of this.laneDashes) {
                 dash.position.z -= moveDistance;
@@ -349,13 +668,53 @@ export class GameManager {
             }
         }
         
-        // Scenery objects (trees)
+        // Scenery objects (trees, lamps, billboards) - parallax effect for depth
         if (this.sceneryObjects) {
+            // Roadside objects move slightly slower for parallax depth effect
+            const scenerySpeed = moveDistance * 0.85;
             for (let obj of this.sceneryObjects) {
-                obj.position.z -= moveDistance;
-                // Loop trees when they pass behind
+                obj.position.z -= scenerySpeed;
+                // Loop objects when they pass behind
                 if (obj.position.z < -100) {
                     obj.position.z += 400;
+                }
+            }
+        }
+        
+        // Buildings - even slower parallax (far background)
+        if (this.buildingObjects) {
+            const buildingSpeed = moveDistance * 0.6;
+            for (let building of this.buildingObjects) {
+                building.position.z -= buildingSpeed;
+                // Loop buildings
+                if (building.position.z < -150) {
+                    building.position.z += 400;
+                }
+            }
+        }
+        
+        // Mountains - very slow parallax (distant background, almost static)
+        if (this.mountainObjects) {
+            const mountainSpeed = moveDistance * 0.3;
+            for (let mountain of this.mountainObjects) {
+                mountain.position.z -= mountainSpeed;
+                // Loop mountains with larger distance
+                if (mountain.position.z < -200) {
+                    mountain.position.z += 800;
+                }
+            }
+        }
+        
+        // Clouds - slow drift for atmospheric effect
+        if (this.cloudObjects) {
+            const cloudSpeed = moveDistance * 0.2;
+            for (let cloud of this.cloudObjects) {
+                cloud.position.z -= cloudSpeed;
+                // Also add slight horizontal drift
+                cloud.position.x += Math.sin(this.gameTime * 0.1) * delta * 0.5;
+                // Loop clouds
+                if (cloud.position.z < -200) {
+                    cloud.position.z += 800;
                 }
             }
         }
@@ -395,17 +754,14 @@ export class GameManager {
             controls.toggleCamera = controls.toggleCamera || touchInput.toggleCamera;
         }
         
-        // Keyboard fallback (safe access)
-        const keyboardFallback = this.game.settingsManager?.settings?.controls?.keyboardFallback ?? true;
-        if (keyboardFallback) {
-            const keys = this.getKeyboardState();
-            controls.accelerate = controls.accelerate || keys.up;
-            controls.brake = controls.brake || keys.down;
-            controls.left = controls.left || keys.left;
-            controls.right = controls.right || keys.right;
-            controls.boost = controls.boost || keys.shift;
-            controls.toggleCamera = controls.toggleCamera || keys.toggleCamera;
-        }
+        // Keyboard controls
+        const keys = this.getKeyboardState();
+        controls.accelerate = controls.accelerate || keys.up;
+        controls.brake = controls.brake || keys.down;
+        controls.left = controls.left || keys.left;
+        controls.right = controls.right || keys.right;
+        controls.boost = controls.boost || keys.shift;
+        controls.toggleCamera = controls.toggleCamera || keys.toggleCamera;
         
         return controls;
     }
@@ -428,8 +784,8 @@ export class GameManager {
         return {
             up: window.keys['KeyW'] || window.keys['ArrowUp'],
             down: window.keys['KeyS'] || window.keys['ArrowDown'],
-            left: window.keys['KeyA'] || window.keys['ArrowLeft'],
-            right: window.keys['KeyD'] || window.keys['ArrowRight'],
+            left: window.keys['KeyD'] || window.keys['ArrowRight'],  // Inverted: D = Left
+            right: window.keys['KeyA'] || window.keys['ArrowLeft'],  // Inverted: A = Right
             shift: window.keys['ShiftLeft'] || window.keys['ShiftRight'],
             toggleCamera: window.keys['KeyV']
         };
@@ -443,19 +799,54 @@ export class GameManager {
         if (scoreEl) scoreEl.textContent = Math.floor(this.distance) + 'm';
         if (bestEl) bestEl.textContent = Math.floor(this.highScore) + 'm';
         
-        // Update speed
+        // Get current speed and boost state
         const speed = Math.floor(this.playerVehicle.getSpeed());
-        document.getElementById('hud-speed').textContent = speed;
+        const isBoosting = this.playerVehicle.isBoosting || false;
+        
+        // Update speedometer gauge (bottom right)
+        const gaugeNeedle = document.getElementById('gauge-needle');
+        const gaugeSpeedDisplay = document.getElementById('gauge-speed-display');
+        if (gaugeNeedle && gaugeSpeedDisplay) {
+            // Rotate needle from -90° (0 km/h) to 90° (299 km/h)
+            const maxSpeed = 299;
+            const rotation = -90 + (speed / maxSpeed) * 180;
+            gaugeNeedle.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+            gaugeSpeedDisplay.textContent = speed;
+        }
+        
+        // Update boost meter (bottom left) - shows energy level
+        const boostFill = document.getElementById('boost-meter-fill');
+        if (boostFill) {
+            // Get boost energy percentage from vehicle
+            const boostPercentage = this.playerVehicle.getBoostPercentage();
+            boostFill.style.width = boostPercentage + '%';
+            
+            // Add active class when boosting
+            if (isBoosting) {
+                boostFill.classList.add('active');
+            } else {
+                boostFill.classList.remove('active');
+            }
+            
+            // Change color based on energy level
+            if (boostPercentage < 20) {
+                boostFill.style.opacity = '0.5'; // Low energy warning
+            } else {
+                boostFill.style.opacity = '1';
+            }
+        }
         
         // Update lives
         const livesEl = document.getElementById('hud-lives');
-        livesEl.innerHTML = '❤️'.repeat(this.lives);
+        if (livesEl) livesEl.innerHTML = '❤️'.repeat(this.lives);
         
         // Update time
         const minutes = Math.floor(this.gameTime / 60);
         const seconds = Math.floor(this.gameTime % 60);
-        document.getElementById('hud-time').textContent = 
-            `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        const timeEl = document.getElementById('hud-time');
+        if (timeEl) {
+            timeEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
         
         // Update camera mode indicator
         const cameraMode = this.playerVehicle.getCameraMode();
@@ -510,6 +901,7 @@ export class GameManager {
         this.gameTime = 0;
         this.isInvulnerable = false;
         this.invulnerabilityTimer = 0;
+        this.isGameOver = false; // Reset game over flag
         
         // Load high score from localStorage
         this.loadHighScore();
@@ -524,7 +916,13 @@ export class GameManager {
     }
 
     gameOver() {
+        // Prevent multiple calls
+        if (this.isGameOver) return;
+        
         console.log('💥 Game Over!');
+        
+        // Set game over flag to stop updates
+        this.isGameOver = true;
         
         // Update high score
         if (this.score > this.highScore) {
@@ -544,11 +942,26 @@ export class GameManager {
         }
         
         // Update game over screen
-        document.getElementById('final-score').textContent = Math.floor(this.score);
-        document.getElementById('final-best').textContent = Math.floor(this.highScore);
+        const finalScoreEl = document.getElementById('final-score');
+        const finalDistanceEl = document.getElementById('final-distance');
+        const finalHighScoreEl = document.getElementById('final-high-score');
+        const finalMaxSpeedEl = document.getElementById('final-max-speed');
         
-        // Change state
-        this.game.setState('game_over');
+        if (finalScoreEl) finalScoreEl.textContent = Math.floor(this.score);
+        if (finalDistanceEl) finalDistanceEl.textContent = Math.floor(this.distance);
+        if (finalHighScoreEl) finalHighScoreEl.textContent = Math.floor(this.highScore);
+        if (finalMaxSpeedEl) finalMaxSpeedEl.textContent = Math.floor(this.playerVehicle.getSpeed());
+        
+        console.log('📊 Final stats updated - Score:', this.score, 'Distance:', this.distance);
+        
+        // Change state to game over
+        console.log('🎬 Calling setState(game_over)...');
+        if (this.game && typeof this.game.setState === 'function') {
+            this.game.setState('game_over');
+            console.log('✅ setState(game_over) called successfully');
+        } else {
+            console.error('❌ Cannot call setState - game reference missing!');
+        }
     }
     
     celebrateNewHighScore() {
@@ -692,6 +1105,42 @@ export class GameManager {
                 });
             }
             this.sceneryObjects = [];
+        }
+        
+        // Remove building objects
+        if (this.buildingObjects) {
+            for (let obj of this.buildingObjects) {
+                this.game.scene.remove(obj);
+                obj.traverse((child) => {
+                    if (child.geometry) child.geometry.dispose();
+                    if (child.material) child.material.dispose();
+                });
+            }
+            this.buildingObjects = [];
+        }
+        
+        // Remove mountain objects
+        if (this.mountainObjects) {
+            for (let obj of this.mountainObjects) {
+                this.game.scene.remove(obj);
+                obj.traverse((child) => {
+                    if (child.geometry) child.geometry.dispose();
+                    if (child.material) child.material.dispose();
+                });
+            }
+            this.mountainObjects = [];
+        }
+        
+        // Remove cloud objects
+        if (this.cloudObjects) {
+            for (let obj of this.cloudObjects) {
+                this.game.scene.remove(obj);
+                obj.traverse((child) => {
+                    if (child.geometry) child.geometry.dispose();
+                    if (child.material) child.material.dispose();
+                });
+            }
+            this.cloudObjects = [];
         }
         
         console.log('✅ Game manager cleaned up');

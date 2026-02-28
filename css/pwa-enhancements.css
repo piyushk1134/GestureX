@@ -1,0 +1,271 @@
+/* PWA Dynamic Scaling and Scrolling Enhancements */
+
+/* Root viewport variables for dynamic scaling */
+:root {
+    --safe-area-inset-top: env(safe-area-inset-top, 0px);
+    --safe-area-inset-right: env(safe-area-inset-right, 0px);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-inset-left: env(safe-area-inset-left, 0px);
+    --vh: 1vh; /* Will be updated via JavaScript for accurate mobile viewport */
+}
+
+/* Smooth scrolling for all scrollable elements */
+html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
+}
+
+/* Body adjustments for better scaling */
+body {
+    /* No scrolling - fixed game viewport */
+    overflow: hidden;
+    /* Use CSS custom properties for viewport height */
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
+    /* Handle safe areas for notched devices */
+    padding-top: var(--safe-area-inset-top);
+    padding-right: var(--safe-area-inset-right);
+    padding-bottom: var(--safe-area-inset-bottom);
+    padding-left: var(--safe-area-inset-left);
+}
+
+/* Screen containers with safe area support */
+.screen {
+    /* Ensure screens respect safe areas */
+    padding-top: max(20px, var(--safe-area-inset-top));
+    padding-right: max(20px, var(--safe-area-inset-right));
+    padding-bottom: max(20px, var(--safe-area-inset-bottom));
+    padding-left: max(20px, var(--safe-area-inset-left));
+    /* Allow scrolling in screens when content overflows */
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Menu container scrolling for small screens */
+.menu-container,
+.settings-container,
+.calibration-container,
+.how-to-play-container {
+    max-height: 90vh;
+    max-height: calc(var(--vh, 1vh) * 90);
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 20px;
+}
+
+/* Game canvas - maintain aspect ratio on different devices */
+#game-canvas {
+    width: 100vw !important;
+    height: 100vh !important;
+    height: calc(var(--vh, 1vh) * 100) !important;
+    display: block;
+    touch-action: none; /* Prevent default touch behaviors on canvas */
+}
+
+/* HUD responsive adjustments */
+#game-hud {
+    /* Adjust for safe areas */
+    padding-top: var(--safe-area-inset-top);
+    padding-right: var(--safe-area-inset-right);
+    padding-bottom: var(--safe-area-inset-bottom);
+    padding-left: var(--safe-area-inset-left);
+}
+
+/* Mobile layout adjustments */
+.mobile-layout .hud-top {
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.mobile-layout .hud-item {
+    font-size: 14px;
+    padding: 6px 10px;
+}
+
+/* Portrait layout adjustments */
+.portrait-layout .game-camera-feed {
+    width: 240px;
+    height: 180px;
+    top: calc(var(--safe-area-inset-top) + 20px);
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Touch controls removed - gesture and keyboard only */
+
+/* Theme toggle button with safe area */
+.theme-toggle-btn {
+    top: calc(var(--safe-area-inset-top) + 10px);
+    right: calc(var(--safe-area-inset-right) + 10px);
+}
+
+/* Scrollbar styling for touch devices */
+@supports (-webkit-overflow-scrolling: touch) {
+    /* Hide scrollbar on iOS but keep functionality */
+    .screen::-webkit-scrollbar,
+    .menu-container::-webkit-scrollbar,
+    .settings-container::-webkit-scrollbar,
+    .how-to-play-content::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+    }
+    
+    .screen::-webkit-scrollbar-track,
+    .menu-container::-webkit-scrollbar-track,
+    .settings-container::-webkit-scrollbar-track,
+    .how-to-play-content::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .screen::-webkit-scrollbar-thumb,
+    .menu-container::-webkit-scrollbar-thumb,
+    .settings-container::-webkit-scrollbar-thumb,
+    .how-to-play-content::-webkit-scrollbar-thumb {
+        background: rgba(52, 152, 219, 0.5);
+        border-radius: 2px;
+    }
+}
+
+/* Tablet landscape optimizations (768px - 1024px) */
+@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    .menu-container,
+    .settings-container,
+    .calibration-container {
+        max-width: 80%;
+        padding: 30px;
+    }
+    
+    .game-camera-feed {
+        width: 280px;
+        height: 210px;
+    }
+}
+
+/* Tablet portrait optimizations (768px - 1024px) */
+@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    .menu-container,
+    .settings-container,
+    .calibration-container,
+    .how-to-play-container {
+        max-width: 90%;
+        max-height: 85vh;
+    }
+    
+    body {
+        overflow-y: scroll;
+    }
+}
+
+/* Small mobile devices (up to 375px) */
+@media screen and (max-width: 375px) {
+    .menu-container,
+    .settings-container,
+    .calibration-container,
+    .how-to-play-container {
+        padding: 15px;
+        max-height: 95vh;
+        max-height: calc(var(--vh, 1vh) * 95);
+    }
+    
+    .game-title {
+        font-size: 48px !important;
+    }
+    
+    .btn {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+    
+    .theme-toggle-btn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+
+/* Extra small devices (up to 320px) */
+@media screen and (max-width: 320px) {
+    .game-title {
+        font-size: 36px !important;
+    }
+    
+    .menu-container,
+    .settings-container,
+    .calibration-container,
+    .how-to-play-container {
+        padding: 10px;
+    }
+}
+
+/* Large screens (1440px+) */
+@media screen and (min-width: 1440px) {
+    .menu-container,
+    .settings-container,
+    .calibration-container,
+    .how-to-play-container {
+        max-width: 1200px;
+    }
+}
+
+/* Ultra-wide screens (2560px+) */
+@media screen and (min-width: 2560px) {
+    .menu-container,
+    .settings-container,
+    .calibration-container,
+    .how-to-play-container {
+        max-width: 1600px;
+        font-size: 120%;
+    }
+}
+
+/* Fix for iOS Safari address bar resize */
+@supports (-webkit-touch-callout: none) {
+    body {
+        /* iOS Safari specific height fix */
+        min-height: -webkit-fill-available;
+    }
+    
+    .screen {
+        height: -webkit-fill-available;
+    }
+}
+
+/* Prevent content shift during scroll on iOS */
+@supports (padding: max(0px)) {
+    body {
+        padding-left: min(0px, env(safe-area-inset-left));
+        padding-right: min(0px, env(safe-area-inset-right));
+    }
+}
+
+/* Loading screen should never scroll */
+#loading-screen {
+    overflow: hidden !important;
+}
+
+/* Game screen should never scroll */
+#game-screen,
+#pause-screen,
+#gameover-screen {
+    overflow: hidden !important;
+}
+
+/* Improve touch interactions */
+.btn,
+.tab-btn,
+.car-control-btn,
+.touch-control {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+/* Prevent zoom on double tap for buttons */
+button,
+.btn,
+input,
+select,
+textarea {
+    touch-action: manipulation;
+}

@@ -1,0 +1,494 @@
+/* Gesture Guide Responsive Scaling */
+
+/* Base gesture guide styles with flexible scaling */
+.gesture-guide {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.6);
+    padding: clamp(15px, 3vw, 30px);
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.gesture-guide h2 {
+    color: var(--primary-color);
+    margin-bottom: clamp(10px, 2vw, 20px);
+    font-size: clamp(20px, 3vw, 28px);
+    text-align: center;
+}
+
+/* Responsive gesture table */
+.gesture-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(14px, 1.5vw, 18px);
+}
+
+.gesture-table th,
+.gesture-table td {
+    padding: clamp(10px, 1.5vw, 15px);
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gesture-table th {
+    background: rgba(52, 152, 219, 0.2);
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: clamp(16px, 1.8vw, 20px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.gesture-table td {
+    color: #fff;
+    font-size: clamp(14px, 1.5vw, 18px);
+}
+
+.gesture-table tr:hover {
+    background: rgba(52, 152, 219, 0.15);
+    transform: scale(1.01);
+    transition: all 0.2s ease;
+}
+
+/* Gesture icons with responsive sizing */
+.gesture-icon {
+    font-size: clamp(20px, 2.5vw, 24px);
+    min-width: clamp(150px, 20vw, 200px);
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.gesture-action {
+    color: var(--success-color);
+    font-weight: 600;
+    font-size: clamp(14px, 1.5vw, 18px);
+}
+
+/* Calibration content responsive layout */
+.calibration-content {
+    display: flex;
+    gap: clamp(20px, 3vw, 40px);
+    margin: clamp(20px, 3vw, 40px) 0;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.camera-container {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    aspect-ratio: 4/3;
+    background: #000;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+/* Small Mobile Devices (≤480px) */
+@media screen and (max-width: 480px) {
+    .gesture-guide {
+        padding: 15px;
+        margin: 10px 0;
+    }
+    
+    .gesture-guide h2 {
+        font-size: 18px;
+        margin-bottom: 12px;
+    }
+    
+    .gesture-table {
+        font-size: 12px;
+    }
+    
+    .gesture-table th,
+    .gesture-table td {
+        padding: 8px 6px;
+    }
+    
+    .gesture-table th {
+        font-size: 14px;
+    }
+    
+    .gesture-table td {
+        font-size: 12px;
+    }
+    
+    .gesture-icon {
+        font-size: 16px;
+        min-width: 100px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .gesture-action {
+        font-size: 12px;
+    }
+    
+    .calibration-content {
+        flex-direction: column;
+        gap: 15px;
+        margin: 15px 0;
+    }
+    
+    .camera-container {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    /* Stack table cells on very small screens */
+    .gesture-table thead {
+        display: none;
+    }
+    
+    .gesture-table tr {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 8px;
+        border-bottom: none;
+    }
+    
+    .gesture-table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border: none;
+    }
+    
+    .gesture-table td:first-child::before {
+        content: "Gesture: ";
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+    
+    .gesture-table td:last-child::before {
+        content: "Action: ";
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+}
+
+/* Mobile Devices (481px - 767px) */
+@media screen and (min-width: 481px) and (max-width: 767px) {
+    .gesture-guide {
+        padding: 20px;
+    }
+    
+    .gesture-guide h2 {
+        font-size: 22px;
+    }
+    
+    .gesture-table {
+        font-size: 14px;
+    }
+    
+    .gesture-table th,
+    .gesture-table td {
+        padding: 10px 8px;
+    }
+    
+    .gesture-icon {
+        font-size: 18px;
+        min-width: 120px;
+    }
+    
+    .gesture-action {
+        font-size: 14px;
+    }
+    
+    .calibration-content {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .camera-container {
+        max-width: 100%;
+    }
+}
+
+/* Tablets (768px - 1024px) */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .gesture-guide {
+        padding: 25px;
+        min-width: 300px;
+    }
+    
+    .gesture-guide h2 {
+        font-size: 24px;
+    }
+    
+    .gesture-table {
+        font-size: 16px;
+    }
+    
+    .gesture-table th,
+    .gesture-table td {
+        padding: 12px 10px;
+    }
+    
+    .gesture-icon {
+        font-size: 20px;
+        min-width: 150px;
+    }
+    
+    .calibration-content {
+        gap: 25px;
+    }
+    
+    /* Portrait tablets - stack vertically */
+    @media (orientation: portrait) {
+        .calibration-content {
+            flex-direction: column;
+        }
+        
+        .gesture-guide {
+            max-width: 100%;
+        }
+    }
+    
+    /* Landscape tablets - side by side */
+    @media (orientation: landscape) {
+        .calibration-content {
+            flex-direction: row;
+        }
+        
+        .camera-container {
+            max-width: 50%;
+        }
+        
+        .gesture-guide {
+            max-width: 45%;
+        }
+    }
+}
+
+/* Desktop (1025px - 1439px) */
+@media screen and (min-width: 1025px) and (max-width: 1439px) {
+    .gesture-guide {
+        padding: 28px;
+        min-width: 350px;
+    }
+    
+    .gesture-guide h2 {
+        font-size: 26px;
+    }
+    
+    .gesture-table {
+        font-size: 17px;
+    }
+    
+    .gesture-table th,
+    .gesture-table td {
+        padding: 14px 12px;
+    }
+    
+    .gesture-icon {
+        font-size: 22px;
+        min-width: 180px;
+    }
+    
+    .calibration-content {
+        flex-direction: row;
+        gap: 35px;
+    }
+    
+    .camera-container {
+        max-width: 55%;
+    }
+    
+    .gesture-guide {
+        max-width: 40%;
+    }
+}
+
+/* Large Desktop (≥1440px) */
+@media screen and (min-width: 1440px) {
+    .gesture-guide {
+        padding: 30px;
+        min-width: 400px;
+    }
+    
+    .gesture-guide h2 {
+        font-size: 28px;
+    }
+    
+    .gesture-table {
+        font-size: 18px;
+    }
+    
+    .gesture-table th,
+    .gesture-table td {
+        padding: 15px;
+    }
+    
+    .gesture-icon {
+        font-size: 24px;
+        min-width: 200px;
+    }
+    
+    .calibration-content {
+        flex-direction: row;
+        gap: 40px;
+    }
+    
+    .camera-container {
+        max-width: 640px;
+    }
+    
+    .gesture-guide {
+        max-width: 450px;
+    }
+}
+
+/* Ultra-Wide (≥2560px) */
+@media screen and (min-width: 2560px) {
+    .gesture-guide {
+        padding: 40px;
+        min-width: 500px;
+    }
+    
+    .gesture-guide h2 {
+        font-size: 36px;
+    }
+    
+    .gesture-table {
+        font-size: 22px;
+    }
+    
+    .gesture-table th,
+    .gesture-table td {
+        padding: 20px;
+    }
+    
+    .gesture-icon {
+        font-size: 28px;
+        min-width: 250px;
+    }
+    
+    .gesture-action {
+        font-size: 22px;
+    }
+    
+    .calibration-content {
+        gap: 60px;
+    }
+    
+    .camera-container {
+        max-width: 800px;
+    }
+    
+    .gesture-guide {
+        max-width: 600px;
+    }
+}
+
+/* Landscape phone optimization (height < 500px) */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+    .gesture-guide {
+        padding: 10px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .gesture-guide h2 {
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+    
+    .gesture-table th,
+    .gesture-table td {
+        padding: 6px 8px;
+    }
+    
+    .gesture-table {
+        font-size: 12px;
+    }
+    
+    .gesture-icon {
+        font-size: 14px;
+        min-width: 80px;
+    }
+    
+    .gesture-action {
+        font-size: 12px;
+    }
+    
+    .calibration-content {
+        gap: 10px;
+        margin: 10px 0;
+    }
+}
+
+/* Print styles for gesture guide */
+@media print {
+    .gesture-guide {
+        background: white !important;
+        color: black !important;
+        padding: 20px;
+        page-break-inside: avoid;
+    }
+    
+    .gesture-table {
+        border: 1px solid #000;
+    }
+    
+    .gesture-table th,
+    .gesture-table td {
+        border: 1px solid #000;
+        color: black !important;
+    }
+    
+    .gesture-table th {
+        background: #f0f0f0 !important;
+    }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    .gesture-table tr {
+        transition: none;
+    }
+    
+    .gesture-table tr:hover {
+        transform: none;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .gesture-table th,
+    .gesture-table td {
+        border: 2px solid #fff;
+    }
+    
+    .gesture-guide {
+        border: 2px solid #fff;
+    }
+}
+
+/* Dark mode specific adjustments (if needed) */
+@media (prefers-color-scheme: dark) {
+    .gesture-guide {
+        background: rgba(0, 0, 0, 0.8);
+    }
+}
+
+/* Light mode specific adjustments (if needed) */
+@media (prefers-color-scheme: light) {
+    .gesture-guide {
+        background: rgba(255, 255, 255, 0.95);
+        color: #000;
+    }
+    
+    .gesture-table td {
+        color: #333;
+    }
+}

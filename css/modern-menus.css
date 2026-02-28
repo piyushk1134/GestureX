@@ -1,0 +1,691 @@
+/* ═══════════════════════════════════════════════════════════════
+   GESTUREX RACING - MODERN MENU REDESIGN
+   Matching the home screen's clean, minimal style
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Import Modern Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+/* ═══════════════════════════════════════════════════════════════
+   SETTINGS SCREEN - Modern Minimal Design
+   ═══════════════════════════════════════════════════════════════ */
+
+#settings-screen.active {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, rgba(10, 10, 20, 0.95) 0%, rgba(20, 20, 40, 0.95) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.settings-container {
+    max-width: 800px;
+    width: 90%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1.5px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 40px 35px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.settings-container .screen-title {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 25px;
+    letter-spacing: -0.02em;
+    text-align: center;
+}
+
+/* Settings Tabs */
+.settings-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 25px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tab-btn {
+    flex: 1;
+    font-family: 'Inter', sans-serif;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.5);
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    letter-spacing: 0.01em;
+}
+
+.tab-btn:hover {
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-btn.active {
+    color: rgba(255, 255, 255, 0.95);
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+/* Settings Content */
+.settings-content {
+    min-height: 250px;
+    margin: 20px 0;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeInUp 0.4s ease-out;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Setting Items */
+.setting-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.setting-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(4px);
+}
+
+.setting-item label {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.01em;
+}
+
+.setting-item select {
+    font-family: 'Inter', sans-serif;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.setting-item select:hover {
+    background: rgba(0, 0, 0, 0.4);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.setting-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #6366f1;
+}
+
+.setting-item input[type="range"] {
+    flex: 1;
+    margin: 0 15px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+}
+
+.setting-item input[type="range"]::-webkit-slider-thumb {
+    width: 18px;
+    height: 18px;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.setting-item input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.5);
+}
+
+.setting-item span {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6366f1;
+    min-width: 50px;
+    text-align: right;
+}
+
+/* About Content */
+.about-content {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+}
+
+.about-content h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.95);
+    margin: 15px 0 10px 0;
+    letter-spacing: -0.01em;
+}
+
+.about-content ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.about-content li {
+    padding: 6px 0 6px 24px;
+    position: relative;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.about-content li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: #6366f1;
+    font-weight: bold;
+}
+
+/* Settings Buttons */
+.settings-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PAUSE SCREEN - Modern Minimal Design
+   ═══════════════════════════════════════════════════════════════ */
+
+#pause-screen.active {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.pause-container {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1.5px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 50px 60px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    max-width: 450px;
+}
+
+.pause-title {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(28px, 5vw, 36px);
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 35px;
+    letter-spacing: -0.02em;
+    animation: fadeInScale 0.5s ease-out;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.pause-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Pause Menu Button Animations */
+.pause-buttons .menu-btn {
+    position: relative;
+    overflow: hidden;
+    animation: slideInFromBottom 0.4s ease-out backwards;
+}
+
+.pause-buttons .menu-btn:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.pause-buttons .menu-btn:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.pause-buttons .menu-btn:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+/* Ripple effect on click */
+.pause-buttons .menu-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.pause-buttons .menu-btn:active::after {
+    width: 300px;
+    height: 300px;
+}
+
+/* Enhanced hover effects for pause buttons */
+.pause-buttons .menu-btn.btn-primary {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.pause-buttons .menu-btn.btn-primary:hover {
+    background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6);
+    transform: translateY(-3px) scale(1.02);
+}
+
+.pause-buttons .menu-btn.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-3px) scale(1.02);
+}
+
+.pause-buttons .menu-btn.btn-danger {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.4);
+}
+
+.pause-buttons .menu-btn.btn-danger:hover {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: rgba(239, 68, 68, 0.6);
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+    transform: translateY(-3px) scale(1.02);
+}
+
+/* Pulse animation for primary button */
+.pause-buttons .menu-btn.btn-primary {
+    animation: slideInFromBottom 0.4s ease-out 0.1s backwards, 
+               subtlePulse 2s ease-in-out 1s infinite;
+}
+
+@keyframes subtlePulse {
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    }
+    50% {
+        box-shadow: 0 4px 20px rgba(99, 102, 241, 0.6);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GAME OVER SCREEN - Modern Minimal Design
+   ═══════════════════════════════════════════════════════════════ */
+
+#gameover-screen.active {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.gameover-container {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1.5px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 45px 55px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    max-width: 500px;
+}
+
+.gameover-title {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(26px, 5vw, 34px);
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 25px;
+    letter-spacing: -0.02em;
+}
+
+.gameover-stats {
+    margin: 25px 0;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+}
+
+.gameover-stats p {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 10px 0;
+    letter-spacing: 0.01em;
+}
+
+.gameover-stats .score {
+    font-size: 24px;
+    font-weight: 700;
+    color: #6366f1;
+    margin: 5px 0;
+}
+
+.high-score {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 15px 0;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.high-score span {
+    font-weight: 700;
+    color: #f59e0b;
+}
+
+.high-score.new-record {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+    border-color: rgba(99, 102, 241, 0.3);
+    color: rgba(255, 255, 255, 0.9);
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.high-score.new-record span {
+    color: #6366f1;
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
+    }
+}
+
+.gameover-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MODERN BUTTONS - Matching Home Screen
+   ═══════════════════════════════════════════════════════════════ */
+
+.menu-btn {
+    font-family: 'Inter', sans-serif;
+    padding: 16px 28px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    border: 1.5px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.menu-btn:hover::before {
+    left: 100%;
+}
+
+.menu-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.menu-btn:active {
+    transform: translateY(0);
+}
+
+.menu-btn.btn-primary {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border-color: rgba(99, 102, 241, 0.3);
+    color: white;
+    font-weight: 600;
+}
+
+.menu-btn.btn-primary:hover {
+    background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+    border-color: rgba(124, 58, 237, 0.4);
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+}
+
+.menu-btn.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.menu-btn.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.menu-btn.btn-danger {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+}
+
+.menu-btn.btn-danger:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #fecaca;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HOW TO PLAY & CAR SELECT - Enhanced for Modern Look
+   ═══════════════════════════════════════════════════════════════ */
+
+#how-to-play-screen.active {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, rgba(10, 10, 20, 0.95) 0%, rgba(20, 20, 40, 0.95) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+#car-select-screen.active {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    /* No background blur to keep car model sharp */
+    background: transparent;
+}
+
+#how-to-play-screen .screen-title,
+#car-select-screen .screen-title {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.95);
+    letter-spacing: -0.02em;
+}
+
+/* Hint Text Styling */
+.hint-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.02em;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CALIBRATION SCREEN
+   ═══════════════════════════════════════════════════════════════ */
+
+#calibration-screen.active {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, rgba(10, 10, 20, 0.95) 0%, rgba(20, 20, 40, 0.95) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.gesture-guide {
+    max-width: 800px;
+    width: 90%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1.5px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 35px 30px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.gesture-guide h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(22px, 4vw, 28px);
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 20px;
+    text-align: center;
+    letter-spacing: -0.02em;
+}
+
+.calibration-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+/* Gesture Table */
+.gesture-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.gesture-table th,
+.gesture-table td {
+    font-family: 'Inter', sans-serif;
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.gesture-table th {
+    background: rgba(99, 102, 241, 0.1);
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.gesture-table td {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.gesture-table tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE ADJUSTMENTS
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    .settings-container,
+    .pause-container,
+    .gameover-container {
+        padding: 30px 25px;
+    }
+    
+    .settings-tabs {
+        flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+        font-size: 12px;
+        padding: 10px 12px;
+    }
+    
+    .menu-btn {
+        padding: 14px 24px;
+        font-size: 13px;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

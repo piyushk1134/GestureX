@@ -1,10 +1,14 @@
 // Service Worker for GestureX Racing PWA
-const CACHE_NAME = 'gesturex-racing-v1';
+const CACHE_NAME = 'gesturex-racing-v3'; // Updated version to force refresh
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/css/styles.css',
   '/css/gesturex-theme.css',
+  '/css/homepage-modern.css',
+  '/css/enhancements.css',
+  '/css/modern-ui.css',
+  '/css/pwa-enhancements.css',
   '/js/main.js',
   '/js/vehicle.js',
   '/js/gameManager.js',
@@ -13,6 +17,8 @@ const ASSETS_TO_CACHE = [
   '/js/settingsManager.js',
   '/js/obstacles.js',
   '/js/debugHelper.js',
+  '/js/backgroundMusic.js',
+  '/js/menuHelpers.js',
   '/manifest.json'
 ];
 
@@ -46,28 +52,51 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch event - serve from cache, fallback to network
+// Fetch event - Network First strategy for HTML/CSS/JS, Cache First for assets
 self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Return cached version or fetch from network
-        return response || fetch(event.request).then((fetchResponse) => {
-          // Cache new resources (except for large files like GLB models)
-          if (event.request.url.indexOf('.glb') === -1) {
-            return caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, fetchResponse.clone());
-              return fetchResponse;
+  const url = new URL(event.request.url);
+  
+  // Network first for HTML, CSS, and JS files to always get fresh content
+  if (event.request.destination === 'document' || 
+      url.pathname.endsWith('.html') || 
+      url.pathname.endsWith('.css') || 
+      url.pathname.endsWith('.js')) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          // Only cache complete responses (not partial 206 responses)
+          if (response && response.status === 200) {
+            const responseClone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseClone);
             });
           }
-          return fetchResponse;
-        });
-      })
-      .catch(() => {
-        // Offline fallback
-        if (event.request.destination === 'document') {
-          return caches.match('/index.html');
-        }
-      })
-  );
+          return response;
+        })
+        .catch(() => {
+          // If network fails, try cache
+          return caches.match(event.request);
+        })
+    );
+  } else {
+    // Cache first for images, fonts, models, etc.
+    event.respondWith(
+      caches.match(event.request)
+        .then((response) => {
+          if (response) {
+            return response;
+          }
+          return fetch(event.request).then((fetchResponse) => {
+            // Only cache complete responses (status 200), not partial (206) or large GLB models
+            if (fetchResponse && fetchResponse.status === 200 && event.request.url.indexOf('.glb') === -1) {
+              return caches.open(CACHE_NAME).then((cache) => {
+                cache.put(event.request, fetchResponse.clone());
+                return fetchResponse;
+              });
+            }
+            return fetchResponse;
+          });
+        })
+    );
+  }
 });

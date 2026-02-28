@@ -11,10 +11,19 @@ export class VehicleController {
         this.velocity = new THREE.Vector3(0, 0, 0);
         this.rotation = 0;
         
-        this.maxSpeed = vehicleData.speed || 200;
+        this.maxSpeed = 250; // Normal max speed capped at 250
+        this.boostMaxSpeed = 299; // Boost max speed
         this.acceleration = vehicleData.acceleration || 7;
         this.handling = vehicleData.handling || 7;
         this.brakeForce = 0.95;
+        this.isBoosting = false; // Track boost state
+        
+        // Boost energy system
+        this.boostEnergy = 100; // Start with full boost
+        this.maxBoostEnergy = 100;
+        this.boostDrainRate = 30; // Energy drained per second when boosting
+        this.boostRechargeRate = 15; // Energy recharged per second when not boosting
+        this.minBoostEnergy = 10; // Minimum energy required to activate boost
         
         this.currentSpeed = 0;
         this.steerAngle = 0;
@@ -106,6 +115,30 @@ export class VehicleController {
             this.cameraToggleCooldown = this.cameraToggleCooldownTime;
         }
         
+        // Handle boost energy system
+        const wantsToBoost = controls.boost || false;
+        
+        // Check if we can boost (have enough energy)
+        if (wantsToBoost && this.boostEnergy >= this.minBoostEnergy) {
+            this.isBoosting = true;
+            // Drain boost energy
+            this.boostEnergy -= this.boostDrainRate * delta;
+            this.boostEnergy = Math.max(0, this.boostEnergy);
+            
+            // If energy runs out, stop boosting
+            if (this.boostEnergy < this.minBoostEnergy) {
+                this.isBoosting = false;
+            }
+        } else {
+            this.isBoosting = false;
+            // Recharge boost energy when not boosting
+            this.boostEnergy += this.boostRechargeRate * delta;
+            this.boostEnergy = Math.min(this.maxBoostEnergy, this.boostEnergy);
+        }
+        
+        // Determine active max speed based on boost
+        const activeMaxSpeed = this.isBoosting ? this.boostMaxSpeed : this.maxSpeed;
+        
         // Handle acceleration
         if (controls.accelerate) {
             this.currentSpeed += this.acceleration * delta * 10;
@@ -116,8 +149,20 @@ export class VehicleController {
             this.currentSpeed *= this.brakeForce;
         }
         
-        // Clamp speed
-        this.currentSpeed = Math.max(0, Math.min(this.currentSpeed, this.maxSpeed));
+        // Clamp speed based on boost state
+        this.currentSpeed = Math.max(0, Math.min(this.currentSpeed, activeMaxSpeed));
+        
+        // If boosting and below boost max, accelerate faster
+        if (this.isBoosting && this.currentSpeed < this.boostMaxSpeed) {
+            this.currentSpeed += this.acceleration * delta * 15; // Extra acceleration during boost
+            this.currentSpeed = Math.min(this.currentSpeed, this.boostMaxSpeed);
+        }
+        
+        // If not boosting and speed exceeds normal max, slow down gradually
+        if (!this.isBoosting && this.currentSpeed > this.maxSpeed) {
+            this.currentSpeed -= this.acceleration * delta * 5; // Gradual slowdown
+            this.currentSpeed = Math.max(this.currentSpeed, this.maxSpeed);
+        }
         
         // Handle lane switching (only if cooldown expired)
         if (this.laneSwitchCooldown <= 0) {
@@ -169,7 +214,7 @@ export class VehicleController {
             case 'chase':
                 // Default chase camera: behind and above the car - perfect balance
                 cameraOffset = new THREE.Vector3(0, 3.5, -10);
-                lerpSpeed = 0.1;
+                lerpSpeed = 0.15; // Increased for smoother following
                 lookAtPoint = new THREE.Vector3(
                     this.body.position.x,
                     this.body.position.y + 1,
@@ -180,7 +225,7 @@ export class VehicleController {
             case 'chase_close':
                 // Close chase camera: closer for intense racing action
                 cameraOffset = new THREE.Vector3(0, 2.5, -6);
-                lerpSpeed = 0.12;
+                lerpSpeed = 0.18; // Increased for smoother following
                 lookAtPoint = new THREE.Vector3(
                     this.body.position.x,
                     this.body.position.y + 1,
@@ -191,7 +236,7 @@ export class VehicleController {
             default:
                 // Fallback to chase camera
                 cameraOffset = new THREE.Vector3(0, 3.5, -10);
-                lerpSpeed = 0.1;
+                lerpSpeed = 0.15;
                 lookAtPoint = new THREE.Vector3(
                     this.body.position.x,
                     this.body.position.y + 1,
@@ -204,11 +249,15 @@ export class VehicleController {
         cameraPosition.copy(this.body.position);
         cameraPosition.add(cameraOffset);
         
-        // Smooth camera movement for stability
+        // Smooth camera movement for stability with enhanced interpolation
         this.camera.position.lerp(cameraPosition, lerpSpeed);
         
-        // Look at target point
-        this.camera.lookAt(lookAtPoint);
+        // Smooth look-at with interpolation for smoother rotation
+        if (!this.targetLookAt) {
+            this.targetLookAt = lookAtPoint.clone();
+        }
+        this.targetLookAt.lerp(lookAtPoint, 0.2); // Smooth look-at interpolation
+        this.camera.lookAt(this.targetLookAt);
     }
     
     toggleCameraMode() {
@@ -263,6 +312,18 @@ export class VehicleController {
 
     getSpeed() {
         return this.currentSpeed;
+    }
+    
+    getBoostEnergy() {
+        return this.boostEnergy;
+    }
+    
+    getMaxBoostEnergy() {
+        return this.maxBoostEnergy;
+    }
+    
+    getBoostPercentage() {
+        return (this.boostEnergy / this.maxBoostEnergy) * 100;
     }
 
     getPosition() {

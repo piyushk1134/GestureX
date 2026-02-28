@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, viewport-fit=cover, interactive-widget=resizes-content">
     <title>🎮 GestureX Racing v0.13</title>
     
     <!-- PWA Meta Tags -->
@@ -31,24 +31,58 @@
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/hud-responsive.css">
     <link rel="stylesheet" href="css/mobile.css">
+    <link rel="stylesheet" href="css/pwa-enhancements.css">
+    <link rel="stylesheet" href="css/gesture-guide-responsive.css">
+    <link rel="stylesheet" href="css/enhancements.css">
+    <link rel="stylesheet" href="css/modern-ui.css">
+    <link rel="stylesheet" href="css/homepage-modern.css">
+    <link rel="stylesheet" href="css/loading-screen-modern.css">
+    <link rel="stylesheet" href="css/modern-menus.css">
 </head>
 <body>
     <!-- Loading Screen -->
     <div id="loading-screen" class="screen active">
+        <!-- Animated overlay effects -->
+        <div class="grid-overlay"></div>
+        <div class="orb-overlay"></div>
+        
         <div class="loading-container">
-            <h1 class="loading-title">🎮 GestureX 🎮</h1>
+            <h1 class="loading-title">GestureX</h1>
+            <p class="loading-subtitle">Hand Gesture Racing</p>
+            
+            <p id="loading-text" class="loading-text">Initializing...</p>
+            
             <div class="loading-bar-container">
                 <div id="loading-progress" class="loading-bar"></div>
             </div>
-            <p id="loading-text" class="loading-text">Initializing...</p>
+            
+            <!-- Loading Tips -->
+            <div class="loading-tips">
+                <div class="tip-icon">💡</div>
+                <div class="tip-text" id="loading-tip">Loading amazing racing experience...</div>
+            </div>
         </div>
     </div>
 
     <!-- Main Menu -->
     <div id="menu-screen" class="screen">
+        <!-- Background Music -->
+        <audio id="bg-music" loop>
+            <source src="assets/sounds/bxkq_PXLWYSE_-_TE_CONOC_-_Super_Slowed_Official_Audio_256KBPS.webm" type="audio/webm">
+        </audio>
+        
+        <!-- Music Control Button -->
+        <button class="music-control" id="music-toggle" title="Toggle Music">
+            <span id="music-icon">🔇</span>
+        </button>
+        
+        <!-- Animated overlay effects -->
+        <div class="grid-overlay"></div>
+        <div class="orb-overlay"></div>
+        
         <div class="menu-container">
-            <h1 class="game-title">🎮 GestureX 🎮</h1>
-            <p class="game-subtitle">Gesture Controlled Racing</p>
+            <h1 class="game-title">GestureX</h1>
+            <p class="game-subtitle">Hand Gesture Racing</p>
             
             <!-- Theme Toggle Button -->
             <button class="theme-toggle-btn" id="btn-toggle-theme" title="Toggle Day/Night Mode">
@@ -56,18 +90,12 @@
             </button>
             
             <div class="menu-buttons">
-                <button class="menu-btn btn-primary" id="btn-start">START GAME 🏁</button>
-                <button class="menu-btn btn-info" id="btn-select-car">SELECT CAR 🏎️</button>
-                <button class="menu-btn btn-secondary" id="btn-how-to-play">HOW TO PLAY 📖</button>
-                <button class="menu-btn btn-warning" id="btn-settings">SETTINGS ⚙️</button>
-                <button class="menu-btn btn-danger" id="btn-quit">QUIT ❌</button>
+                <button class="btn-minimal primary" id="btn-start">Start Race</button>
+                <button class="btn-minimal" id="btn-select-car">Select Car</button>
+                <button class="btn-minimal" id="btn-how-to-play">How to Play</button>
+                <button class="btn-minimal" id="btn-settings">Settings</button>
             </div>
             
-            <div class="menu-features">
-                <p>✋ Real-time hand gesture control</p>
-                <p>📷 No keyboard/mouse needed</p>
-                <p>🎯 Works with any webcam</p>
-            </div>
         </div>
     </div>
 
@@ -80,7 +108,7 @@
                 <!-- Quick Start Guide -->
                 <div class="tutorial-section quick-guide">
                     <h2>🎯 Quick Start</h2>
-                    <p class="quick-desc">Use <strong>W/A/S/D</strong> or <strong>Arrow Keys</strong> to control your car. Avoid obstacles and drive as far as you can!</p>
+                    <p class="quick-desc">Use <strong>Keyboard (W/A/S/D)</strong>, <strong>Hand Gestures</strong>, or <strong>Touch Controls</strong> to drive your car. Avoid obstacles and drive as far as you can!</p>
                 </div>
                 
                 <!-- Controls -->
@@ -91,8 +119,8 @@
                             <h3>⌨️ Keyboard</h3>
                             <div class="control-item"><span class="key">W / ↑</span> Accelerate</div>
                             <div class="control-item"><span class="key">S / ↓</span> Brake</div>
-                            <div class="control-item"><span class="key">A / ←</span> Left Lane</div>
-                            <div class="control-item"><span class="key">D / →</span> Right Lane</div>
+                            <div class="control-item"><span class="key">D / →</span> Turn Left</div>
+                            <div class="control-item"><span class="key">A / ←</span> Turn Right</div>
                         </div>
                         
                         <div class="control-card">
@@ -217,7 +245,7 @@
                 <!-- Graphics Tab -->
                 <div class="tab-content active" id="tab-graphics">
                     <div class="setting-item">
-                        <label>Quality:</label>
+                        <label for="setting-quality">Quality:</label>
                         <select id="setting-quality">
                             <option value="low">Low</option>
                             <option value="medium">Medium</option>
@@ -226,15 +254,15 @@
                         </select>
                     </div>
                     <div class="setting-item">
-                        <label>Shadows:</label>
+                        <label for="setting-shadows">Shadows:</label>
                         <input type="checkbox" id="setting-shadows" checked>
                     </div>
                     <div class="setting-item">
-                        <label>Effects:</label>
+                        <label for="setting-effects">Effects:</label>
                         <input type="checkbox" id="setting-effects" checked>
                     </div>
                     <div class="setting-item">
-                        <label>FPS Counter:</label>
+                        <label for="setting-fps">FPS Counter:</label>
                         <input type="checkbox" id="setting-fps">
                     </div>
                 </div>
@@ -242,22 +270,22 @@
                 <!-- Audio Tab -->
                 <div class="tab-content" id="tab-audio">
                     <div class="setting-item">
-                        <label>Master Volume:</label>
+                        <label for="setting-master-volume">Master Volume:</label>
                         <input type="range" id="setting-master-volume" min="0" max="100" value="70">
                         <span id="master-volume-value">70%</span>
                     </div>
                     <div class="setting-item">
-                        <label>SFX Volume:</label>
+                        <label for="setting-sfx-volume">SFX Volume:</label>
                         <input type="range" id="setting-sfx-volume" min="0" max="100" value="80">
                         <span id="sfx-volume-value">80%</span>
                     </div>
                     <div class="setting-item">
-                        <label>Music Volume:</label>
+                        <label for="setting-music-volume">Music Volume:</label>
                         <input type="range" id="setting-music-volume" min="0" max="100" value="50">
                         <span id="music-volume-value">50%</span>
                     </div>
                     <div class="setting-item">
-                        <label>Mute All:</label>
+                        <label for="setting-mute">Mute All:</label>
                         <input type="checkbox" id="setting-mute">
                     </div>
                 </div>
@@ -265,19 +293,19 @@
                 <!-- Controls Tab -->
                 <div class="tab-content" id="tab-controls">
                     <div class="setting-item">
-                        <label>Gesture Sensitivity:</label>
+                        <label for="setting-sensitivity">Gesture Sensitivity:</label>
                         <input type="range" id="setting-sensitivity" min="1" max="10" value="5">
                         <span id="sensitivity-value">5</span>
                     </div>
                     <div class="setting-item">
-                        <label>Camera Position:</label>
+                        <label for="setting-camera">Camera Position:</label>
                         <select id="setting-camera">
                             <option value="front" selected>Front</option>
                             <option value="side">Side</option>
                         </select>
                     </div>
                     <div class="setting-item">
-                        <label>Keyboard Fallback:</label>
+                        <label for="setting-keyboard">Keyboard Fallback:</label>
                         <input type="checkbox" id="setting-keyboard" checked>
                     </div>
                     <div class="setting-item">
@@ -392,12 +420,31 @@
         </div>
     </div>
 
+    <!-- Enhanced Speedometer Gauge -->
+    <div class="speedometer-gauge" id="speedometer-gauge" style="display: none;">
+        <div class="gauge-background">
+            <div class="gauge-needle" id="gauge-needle"></div>
+            <div class="gauge-center"></div>
+            <div class="gauge-speed" id="gauge-speed-display">0</div>
+            <div class="gauge-label">KM/H</div>
+        </div>
+    </div>
+    
+    <!-- Boost Meter -->
+    <div class="boost-meter" id="boost-meter" style="display: none;">
+        <div class="boost-meter-label">🚀 BOOST</div>
+        <div class="boost-meter-bar">
+            <div class="boost-meter-fill" id="boost-meter-fill"></div>
+        </div>
+    </div>
+    
     <!-- Game HUD -->
     <div id="game-hud" class="hud hidden">
         <div class="hud-top-left">
             <div class="hud-score">🏆 Score: <span id="hud-score">0</span></div>
             <div class="hud-best">⭐ Highest: <span id="hud-best">0</span></div>
-            <div class="hud-speed">⚡ Speed: <span id="hud-speed">0</span></div>
+            <!-- Speed removed from top HUD - now shown in speedometer gauge -->
+            <div class="hud-fps" id="hud-fps" style="display: none;">📊 FPS: <span id="fps-value">60</span></div>
         </div>
         
         <div class="hud-top-right">
@@ -454,6 +501,8 @@
     </script>
     
     <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/backgroundMusic.js"></script>
+    <script src="js/menuHelpers.js"></script>
     
     <!-- Service Worker Registration -->
     <script>

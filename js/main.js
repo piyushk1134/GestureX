@@ -48,6 +48,11 @@ class GestureXRacing {
         this.assetsLoaded = 0;
         this.totalAssets = 5; // 5 cars
         
+        // FPS Counter
+        this.fpsFrames = 0;
+        this.fpsTime = 0;
+        this.currentFPS = 60;
+        
         // Start initialization
         this.init().catch(err => {
             console.error('Fatal initialization error:', err);
@@ -185,7 +190,30 @@ class GestureXRacing {
         // Performance optimizations
         this.renderer.info.autoReset = false; // Manual reset for better control
         
+        // Setup dynamic viewport height for mobile browsers
+        this.setupViewportHeight();
+        
+        // Add resize listener
         window.addEventListener('resize', () => this.onWindowResize());
+        
+        // Add orientation change listener
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => this.onWindowResize(), 100);
+        });
+    }
+    
+    setupViewportHeight() {
+        // Fix for mobile viewport height (addresses iOS Safari toolbar)
+        const setVH = () => {
+            const vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        };
+        
+        setVH();
+        window.addEventListener('resize', setVH);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(setVH, 100);
+        });
     }
 
     setupScene() {
@@ -328,8 +356,8 @@ class GestureXRacing {
         }
         
         showDebugInfo(`✅ Loaded ${this.vehicles.length} vehicles`, 'success');
-        this.updateLoadingProgress(100, 'Ready!');
-        await new Promise(resolve => setTimeout(resolve, 500));
+        this.updateLoadingProgress(100, 'Ready! Starting game...');
+        await new Promise(resolve => setTimeout(resolve, 800));
     }
 
     updateLoadingProgress(percent, text) {
@@ -395,6 +423,14 @@ class GestureXRacing {
             this.settingsManager.saveSettings();
             this.applySettings();
             this.setState(GAME_STATES.MENU);
+        });
+        
+        // Live update FPS counter checkbox
+        document.getElementById('setting-fps')?.addEventListener('change', (e) => {
+            const fpsCounter = document.getElementById('hud-fps');
+            if (fpsCounter) {
+                fpsCounter.style.display = e.target.checked ? 'block' : 'none';
+            }
         });
         
         document.getElementById('btn-back-from-settings')?.addEventListener('click', () => {
@@ -463,7 +499,7 @@ class GestureXRacing {
             this.quitToMenu();
         });
         
-        // Keyboard Controls
+        // Keyboard Controls for menu navigation only (ESC for pause)
         window.addEventListener('keydown', (e) => this.handleKeyPress(e));
         
         // Theme Toggle Button
@@ -546,6 +582,12 @@ class GestureXRacing {
                 
             case GAME_STATES.CAR_SELECT:
                 document.getElementById('car-select-screen')?.classList.add('active');
+                // Make canvas visible for car preview
+                const carSelectCanvas = document.getElementById('game-canvas');
+                if (carSelectCanvas) carSelectCanvas.style.zIndex = '0';
+                // Position camera for car preview
+                this.camera.position.set(0, 2, 8);
+                this.camera.lookAt(0, 0, 0);
                 this.carSelector?.showCarousel();
                 break;
                 
@@ -574,15 +616,23 @@ class GestureXRacing {
                 document.getElementById('game-canvas').style.zIndex = '0';
                 document.getElementById('game-hud')?.classList.remove('hidden');
                 document.getElementById('game-camera-feed')?.classList.remove('hidden');
+                document.getElementById('speedometer-gauge')?.style.setProperty('display', 'block');
+                document.getElementById('boost-meter')?.style.setProperty('display', 'block');
                 document.getElementById('pause-screen')?.classList.remove('active');
                 break;
                 
             case GAME_STATES.PAUSED:
                 document.getElementById('pause-screen')?.classList.add('active');
+                document.getElementById('game-camera-feed')?.classList.add('hidden');
+                document.getElementById('speedometer-gauge')?.style.setProperty('display', 'none');
+                document.getElementById('boost-meter')?.style.setProperty('display', 'none');
                 break;
                 
             case GAME_STATES.GAME_OVER:
                 document.getElementById('gameover-screen')?.classList.add('active');
+                document.getElementById('game-camera-feed')?.classList.add('hidden');
+                document.getElementById('speedometer-gauge')?.style.setProperty('display', 'none');
+                document.getElementById('boost-meter')?.style.setProperty('display', 'none');
                 break;
         }
     }
@@ -654,33 +704,94 @@ class GestureXRacing {
             this.renderer.shadowMap.enabled = false; // Always disabled for 60fps
         }
         
+        // Apply FPS counter setting
+        const fpsCounter = document.getElementById('hud-fps');
+        if (fpsCounter) {
+            fpsCounter.style.display = settings.graphics.fps ? 'block' : 'none';
+        }
+        
         // Apply audio settings
         // TODO: Implement audio system
         
-        console.log('✓ Settings applied (Performance Mode: 60fps)');
+        console.log('✓ Settings applied (Performance Mode: 60fps, FPS Counter: ' + (settings.graphics.fps ? 'ON' : 'OFF') + ')');
     }
 
     onWindowResize() {
-        this.camera.aspect = window.innerWidth / window.innerHeight;
+        // Get actual viewport dimensions
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        
+        // Update camera aspect ratio
+        this.camera.aspect = width / height;
         this.camera.updateProjectionMatrix();
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        
+        // Update renderer size
+        this.renderer.setSize(width, height);
+        
+        // Handle device pixel ratio dynamically for better quality on different screens
+        // But keep it capped for performance
+        const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+        this.renderer.setPixelRatio(pixelRatio);
+        
+        console.log(`🔄 Window resized: ${width}x${height}, pixelRatio: ${pixelRatio}`);
+        
+        // Update HUD elements if needed
+        this.updateHUDLayout();
+    }
+    
+    updateHUDLayout() {
+        // Adjust HUD elements for different screen sizes
+        const isMobile = window.innerWidth < 768;
+        const isPortrait = window.innerHeight > window.innerWidth;
+        
+        const hud = document.getElementById('game-hud');
+        if (hud) {
+            if (isMobile) {
+                hud.classList.add('mobile-layout');
+            } else {
+                hud.classList.remove('mobile-layout');
+            }
+            
+            if (isPortrait) {
+                hud.classList.add('portrait-layout');
+            } else {
+                hud.classList.remove('portrait-layout');
+            }
+        }
     }
 
     animate() {
         requestAnimationFrame(() => this.animate());
         
-        const delta = Math.min(this.clock.getDelta(), 0.1); // Cap delta to prevent huge jumps
+        // Advanced delta time management for smooth frame-independent movement
+        let delta = this.clock.getDelta();
         
-        // Update based on state
+        // Clamp delta to prevent huge jumps (lag spikes, tab switching)
+        delta = Math.min(delta, 0.1);
+        
+        // Apply smoothing to delta for more consistent frame times
+        if (!this.smoothedDelta) {
+            this.smoothedDelta = delta;
+        }
+        const smoothingFactor = 0.2; // Lower = smoother, higher = more responsive
+        this.smoothedDelta = this.smoothedDelta * (1 - smoothingFactor) + delta * smoothingFactor;
+        
+        // Use smoothed delta for game updates
+        const finalDelta = this.smoothedDelta;
+        
+        // Update FPS counter if enabled
+        this.updateFPSCounter(delta);
+        
+        // Update based on state using smoothed delta for consistent motion
         if (this.state === GAME_STATES.MENU) {
-            this.carSelector?.updateMenuPreview(delta);
+            this.carSelector?.updateMenuPreview(finalDelta);
         } else if (this.state === GAME_STATES.CAR_SELECT) {
-            this.carSelector?.updateCarousel(delta);
+            this.carSelector?.updateCarousel(finalDelta);
         } else if (this.state === GAME_STATES.CALIBRATION) {
             // Gesture control updates itself via MediaPipe callbacks
         } else if (this.state === GAME_STATES.PLAYING) {
             if (this.gameManager) {
-                this.gameManager.update(delta);
+                this.gameManager.update(finalDelta);
             }
             // Gesture control updates itself via MediaPipe callbacks
         } else if (this.state === GAME_STATES.GAME_OVER) {
@@ -689,6 +800,39 @@ class GestureXRacing {
         }
         
         this.renderer.render(this.scene, this.camera);
+    }
+    
+    updateFPSCounter(delta) {
+        // Only update if FPS counter is enabled
+        if (!this.settingsManager?.settings?.graphics?.fps) return;
+        
+        this.fpsFrames++;
+        this.fpsTime += delta;
+        
+        // Update FPS display every 0.5 seconds
+        if (this.fpsTime >= 0.5) {
+            this.currentFPS = Math.round(this.fpsFrames / this.fpsTime);
+            this.fpsFrames = 0;
+            this.fpsTime = 0;
+            
+            // Update the display
+            const fpsValue = document.getElementById('fps-value');
+            if (fpsValue) {
+                fpsValue.textContent = this.currentFPS;
+                
+                // Color code based on FPS
+                const fpsContainer = document.getElementById('hud-fps');
+                if (fpsContainer) {
+                    if (this.currentFPS >= 55) {
+                        fpsContainer.style.color = '#2ecc71'; // Green
+                    } else if (this.currentFPS >= 30) {
+                        fpsContainer.style.color = '#f39c12'; // Orange
+                    } else {
+                        fpsContainer.style.color = '#e74c3c'; // Red
+                    }
+                }
+            }
+        }
     }
 
     getSelectedVehicle() {

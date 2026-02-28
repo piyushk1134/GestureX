@@ -1,25 +1,12 @@
 /* Mobile and Touch Controls Styles */
 
-/* Touch Controls Overlay - Improved for PWA */
+/* Touch Controls DISABLED - Using keyboard and gesture controls only */
 .touch-controls {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1000;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    padding: max(20px, env(safe-area-inset-bottom));
-    padding-left: max(20px, env(safe-area-inset-left));
-    padding-right: max(20px, env(safe-area-inset-right));
-    box-sizing: border-box;
+    display: none !important;
 }
 
 .touch-controls.hidden {
-    display: none;
+    display: none !important;
 }
 
 .touch-left-side,
@@ -169,8 +156,11 @@
     }
     
     #game-camera-feed {
-        width: 120px;
-        height: 90px;
+        width: 200px;
+        height: 150px;
+        top: 15px;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }
 

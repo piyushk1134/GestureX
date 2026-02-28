@@ -7,9 +7,9 @@ export class ObstacleManager {
         this.obstacles = [];
         this.barriers = [];
         this.spawnTimer = 0;
-        this.spawnInterval = 2.5;
+        this.spawnInterval = 2.0; // Faster spawn rate
         this.difficulty = 1.0;
-        this.obstacleSpeed = 30;
+        this.obstacleSpeed = 80; // Increased from 30 to 80 for faster movement
         this.trafficCarModel = null;
         
         this.createBarriers();
@@ -66,25 +66,54 @@ export class ObstacleManager {
     }
     
     update(delta, playerPosition) {
-        const moveSpeed = this.obstacleSpeed * this.difficulty * delta;
+        // Smooth delta clamping to prevent stuttering
+        const clampedDelta = Math.min(delta, 0.1);
+        const moveSpeed = this.obstacleSpeed * this.difficulty * clampedDelta;
         
+        // Update obstacles with smooth interpolation
         for (let obstacle of this.obstacles) {
+            // Store previous position for interpolation
+            if (!obstacle.previousZ) {
+                obstacle.previousZ = obstacle.position.z;
+            }
+            
+            // Update position
+            obstacle.previousZ = obstacle.position.z;
             obstacle.position.z -= moveSpeed;
+            
+            // Apply position to mesh with smoothing
             if (obstacle.mesh) {
-                obstacle.mesh.position.z = obstacle.position.z;
+                // Smooth interpolation for better visual quality
+                const lerpFactor = 0.3; // Adjust for smoothness (lower = smoother, higher = more responsive)
+                const targetZ = obstacle.position.z;
+                const currentZ = obstacle.mesh.position.z;
+                obstacle.mesh.position.z = currentZ + (targetZ - currentZ) * lerpFactor;
             }
         }
         
-        this.spawnTimer += delta;
+        // Update spawn timer
+        this.spawnTimer += clampedDelta;
         if (this.spawnTimer >= this.spawnInterval) {
             this.spawnRandomObstacle(playerPosition);
             this.spawnTimer = 0;
         }
         
+        // Remove obstacles that are behind player with smooth cleanup
         this.obstacles = this.obstacles.filter(obstacle => {
             const distance = playerPosition.z - obstacle.position.z;
             if (distance > 50) {
-                this.scene.remove(obstacle.mesh);
+                if (obstacle.mesh) {
+                    this.scene.remove(obstacle.mesh);
+                    // Dispose geometry and materials for memory management
+                    if (obstacle.mesh.geometry) obstacle.mesh.geometry.dispose();
+                    if (obstacle.mesh.material) {
+                        if (Array.isArray(obstacle.mesh.material)) {
+                            obstacle.mesh.material.forEach(mat => mat.dispose());
+                        } else {
+                            obstacle.mesh.material.dispose();
+                        }
+                    }
+                }
                 return false;
             }
             return true;
@@ -194,7 +223,8 @@ export class ObstacleManager {
     
     setDifficulty(difficulty) {
         this.difficulty = difficulty;
-        this.spawnInterval = Math.max(0.8, 2.5 / difficulty);
+        this.spawnInterval = Math.max(0.5, 2.0 / difficulty); // Faster spawn with difficulty
+        this.obstacleSpeed = 80 + (difficulty * 20); // Speed increases with difficulty
     }
     
     reset() {
@@ -204,7 +234,8 @@ export class ObstacleManager {
         this.obstacles = [];
         this.spawnTimer = 0;
         this.difficulty = 1.0;
-        this.spawnInterval = 2.5;
+        this.spawnInterval = 2.0;
+        this.obstacleSpeed = 80;
     }
     
     cleanup() {

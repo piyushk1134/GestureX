@@ -126,7 +126,7 @@ export class GestureControl {
             console.error('Error:', error.message);
             console.error('Stack:', error.stack);
             console.error('════════════════════════════════════════════');
-            console.log('💡 Falling back to keyboard controls (W/A/S/D)');
+            console.log('💡 Use keyboard (W/A/S/D) or touch controls');
             console.log('');
             return false;
         }

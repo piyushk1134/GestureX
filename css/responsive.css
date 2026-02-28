@@ -178,12 +178,13 @@ body {
     font-weight: 700;
 }
 
-/* Responsive Camera Feed */
+/* Responsive Camera Feed - TOP MIDDLE */
 #game-camera-feed {
     position: fixed;
-    bottom: var(--spacing-md);
-    right: var(--spacing-md);
-    width: clamp(120px, 20vw, 200px);
+    top: var(--spacing-md);
+    left: 50%;
+    transform: translateX(-50%);
+    width: clamp(200px, 25vw, 320px);
     height: auto;
     aspect-ratio: 4/3;
     border-radius: var(--radius-md);
@@ -408,11 +409,7 @@ input[type="range"]::-moz-range-thumb {
         padding-right: max(var(--spacing-md), env(safe-area-inset-right));
     }
     
-    .touch-controls {
-        padding-bottom: max(20px, env(safe-area-inset-bottom));
-        padding-left: max(20px, env(safe-area-inset-left));
-        padding-right: max(20px, env(safe-area-inset-right));
-    }
+    /* Touch controls disabled - using gesture and keyboard only */
 }
 
 /* Reduce Motion for Accessibility */
